@@ -1,0 +1,174 @@
+.nirvana-home {
+  --nirvana-mist: #eef6f1;
+  --nirvana-cream: #f8fbf9;
+  --nirvana-sage: #b5d4c3;
+  --nirvana-mint: #d8ebe1;
+  --nirvana-leaf: #8fbfa3;
+  --nirvana-forest: #2a4538;
+  --nirvana-deep: #162820;
+  --nirvana-gold: #c4a574;
+
+  background-color: var(--nirvana-cream);
+  color: var(--nirvana-deep);
+  font-family: var(--font-zaslia), "Zaslia", Georgia, serif;
+  font-weight: 500;
+  -webkit-font-smoothing: antialiased;
+}
+
+.nirvana-home h1,
+.nirvana-home h2,
+.nirvana-home h3,
+.nirvana-home .font-display {
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  /* Slightly thicker stroke for single-weight Zaslia */
+  -webkit-text-stroke: 0.35px currentColor;
+  paint-order: stroke fill;
+}
+
+.nirvana-home .font-body {
+  font-family: ui-sans-serif, system-ui, sans-serif;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  -webkit-text-stroke: 0;
+}
+
+.nirvana-home .font-body-strong {
+  font-family: ui-sans-serif, system-ui, sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+}
+
+.nirvana-home .text-gradient {
+  background: linear-gradient(135deg,
+      var(--nirvana-forest) 0%,
+      var(--nirvana-leaf) 55%,
+      var(--nirvana-sage) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.nirvana-home .glass-nav {
+  background: color-mix(in srgb, var(--nirvana-cream) 72%, transparent);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid color-mix(in srgb, var(--nirvana-sage) 40%, transparent);
+}
+
+.nirvana-home .luxury-hero {
+  background-color: var(--nirvana-cream);
+}
+
+.nirvana-home .luxury-hero__scroll {
+  text-decoration: none;
+}
+
+.nirvana-home .hero-glow {
+  background: radial-gradient(ellipse 80% 60% at 50% 40%,
+      color-mix(in srgb, var(--nirvana-mint) 90%, transparent),
+      transparent 70%);
+}
+
+.nirvana-home .frame-card {
+  border: 1px solid color-mix(in srgb, var(--nirvana-sage) 55%, transparent);
+  background: linear-gradient(160deg,
+      color-mix(in srgb, var(--nirvana-mist) 80%, white),
+      color-mix(in srgb, var(--nirvana-mint) 35%, white));
+  box-shadow:
+    0 24px 60px -28px color-mix(in srgb, var(--nirvana-forest) 35%, transparent),
+    inset 0 1px 0 color-mix(in srgb, white 60%, transparent);
+}
+
+.nirvana-home .marquee-track {
+  display: flex;
+  width: max-content;
+  gap: 4rem;
+  white-space: nowrap;
+}
+
+.nirvana-home .line-reveal {
+  overflow: hidden;
+}
+
+.nirvana-home .line-reveal__text {
+  display: block;
+}
+
+/* Visible before GSAP runs; entrance uses gsap.from() after mount */
+.nirvana-home:not(.home-animated) .line-reveal__text,
+.nirvana-home:not(.home-animated) [data-hero-fade],
+.nirvana-home:not(.home-animated) [data-hero-visual] {
+  opacity: 1;
+  transform: none;
+}
+
+.nirvana-home [data-hero-visual-media],
+.nirvana-home [data-hero-bg] {
+  transform-origin: center;
+}
+
+/* Hero model cutout — no frame; image floats with shadow on silhouette */
+.nirvana-home .hero-cutout-column {
+  overflow: visible;
+}
+
+.nirvana-home .hero-cutout-wrap {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  overflow: visible;
+}
+
+.nirvana-home .hero-cutout-image {
+  position: relative;
+  z-index: 1;
+  mix-blend-mode: screen;
+  filter:
+    drop-shadow(0 32px 48px color-mix(in srgb, var(--nirvana-forest) 22%, transparent))
+    drop-shadow(0 16px 28px color-mix(in srgb, var(--nirvana-forest) 16%, transparent))
+    drop-shadow(0 6px 14px color-mix(in srgb, var(--nirvana-deep) 12%, transparent));
+}
+
+.nirvana-home .image-cover {
+  object-fit: cover;
+  object-position: center;
+}
+
+.nirvana-home .cta-image-bg {
+  object-fit: cover;
+  object-position: center 30%;
+  opacity: 0.28;
+}
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+
+.svg-path-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  pointer-events: none;
+  width: 100%;
+  height: 100%;
+}
+
+.svg-path-overlay__path {
+  fill: #2a4538;
+}
+
+.nirvana-home .grain::after {
+  content: "";
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
