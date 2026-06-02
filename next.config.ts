@@ -5,14 +5,14 @@ const nextConfig: NextConfig = {
     unoptimized: true,
     remotePatterns: [
       {
-        protocol: "http",
-        hostname: "localhost",
-        port: "3007",
+        protocol: "https",
+        hostname: "api.nirvana.style",
         pathname: "/files/**",
       },
       {
-        protocol: "https",
-        hostname: "server.gravisindia.com",
+        protocol: "http",
+        hostname: "31.97.227.94",
+        port: "3013",
         pathname: "/files/**",
       },
     ],
