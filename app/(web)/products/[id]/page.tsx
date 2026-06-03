@@ -6,6 +6,9 @@ import { getProduct } from "@/services/api/product.api";
 import { ProductImageGallery } from "@/components/pages/products/product-image-gallery";
 import { AddToCartButton } from "@/components/pages/products/add-to-cart-button";
 import { EnquireNowButton } from "@/components/pages/products/enquire-now-button";
+import { resolvePublicFileUrl } from "@/utils/resolvePublicFileUrl";
+
+export const dynamic = "force-dynamic";
 
 type ProductDetailPageProps = {
   params: Promise<{ id: string }>;
@@ -45,12 +48,12 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
 
     // Construct image URLs list
     if (product.primary_image?.url) {
-      imageUrls.push(product.primary_image.url);
+      imageUrls.push(resolvePublicFileUrl(product.primary_image.url));
     }
     if (product.images && product.images.length > 0) {
       product.images.forEach((img: any) => {
         if (img.image?.url && img.image.url !== product.primary_image?.url) {
-          imageUrls.push(img.image.url);
+          imageUrls.push(resolvePublicFileUrl(img.image.url));
         }
       });
     }

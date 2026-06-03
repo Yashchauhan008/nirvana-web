@@ -19,6 +19,7 @@ import { NirvanaFooter } from "@/components/home/nirvana-footer";
 import { homeImages } from "@/config/home-images";
 import { zaslia } from "@/lib/fonts/zaslia";
 import type { Product } from "@/services/api/product.api";
+import { resolvePublicFileUrl } from "@/utils/resolvePublicFileUrl";
 import "@/styles/home.css";
 
 const MARQUEE = [
@@ -223,10 +224,11 @@ export function NirvanaHome({ products = [] }: { products?: Product[] }) {
             {products && products.length > 0 ? (
               products.map((product) => {
                 const imageUrl =
-                  product.primary_image?.url ??
-                  product.images?.find((i) => i.is_primary)?.image?.url ??
-                  product.images?.[0]?.image?.url ??
-                  "/images/models/model3.png";
+                  resolvePublicFileUrl(
+                    product.primary_image?.url ??
+                      product.images?.find((i) => i.is_primary)?.image?.url ??
+                      product.images?.[0]?.image?.url,
+                  ) || "/images/models/model3.png";
 
                 const displayPrice = new Intl.NumberFormat("en-IN", {
                   style: "currency",

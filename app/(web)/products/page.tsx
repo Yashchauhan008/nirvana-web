@@ -3,6 +3,9 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { homeImages } from "@/config/home-images";
 import { listProducts } from "@/services/api/product.api";
+import { resolvePublicFileUrl } from "@/utils/resolvePublicFileUrl";
+
+export const dynamic = "force-dynamic";
 
 export default async function ProductsPage() {
   const products = await listProducts();
@@ -29,11 +32,11 @@ export default async function ProductsPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
           {products && products.length > 0 ? (
             products.map((product) => {
-              const imageUrl =
+              const imageUrl = resolvePublicFileUrl(
                 product.primary_image?.url ??
-                product.images?.find((i) => i.is_primary)?.image?.url ??
-                product.images?.[0]?.image?.url ??
-                "/images/models/model3.png";
+                  product.images?.find((i) => i.is_primary)?.image?.url ??
+                  product.images?.[0]?.image?.url,
+              ) || "/images/models/model3.png";
 
               const displayPrice = new Intl.NumberFormat("en-IN", {
                 style: "currency",
