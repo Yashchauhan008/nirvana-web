@@ -69,11 +69,11 @@ export function LuxuryHero() {
 
             <h1 className="font-display text-[clamp(3.5rem,8vw,8.5rem)] leading-[0.88] tracking-tighter text-[var(--nirvana-deep)] drop-shadow-sm">
               <span className="line-reveal block" data-hero-line>
-                <span className="line-reveal__text">Wear without</span>
+                <span className="line-reveal__text">Redefine</span>
               </span>
               <span className="line-reveal block" data-hero-line>
                 <span className="line-reveal__text text-transparent bg-clip-text bg-gradient-to-r from-[var(--nirvana-forest)] via-[var(--nirvana-leaf)] to-[var(--nirvana-gold)] italic pr-4">
-                  Arms
+                  Vision
                 </span>
               </span>
             </h1>
@@ -82,9 +82,9 @@ export function LuxuryHero() {
               data-hero-fade
               className="font-body mt-8 max-w-lg text-lg leading-relaxed text-[var(--nirvana-forest)]/80"
             >
-              Nirvana pieces hang from the ear on fine chains — never temple arms.
-              A balance chain behind the ear guides the bridge onto your nose, while
-              crystal and jewelry drops finish every line.
+              Nirvana pieces hang from the ear on fine chains — never temple
+              arms. A balance chain behind the ear guides the bridge onto your
+              nose, while crystal and jewelry drops finish every line.
             </p>
 
             <div
