@@ -1,17 +1,10 @@
 "use client";
 
-import { useLayoutEffect, type MutableRefObject, type RefObject } from "react";
+import { useLayoutEffect, type RefObject } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Lenis from "lenis";
-import "lenis/dist/lenis.css";
 
-import {
-  attachLenisToGsapTicker,
-  connectLenisScrollTrigger,
-  setWindowLenis,
-  scheduleScrollTriggerRefresh,
-} from "@/lib/scroll/lenis-scroll";
+import { scheduleScrollTriggerRefresh } from "@/lib/scroll/lenis-scroll";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -26,31 +19,12 @@ const prefersReducedMotion =
   typeof window !== "undefined" &&
   window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-export function useHomeAnimations(
-  rootRef: RefObject<HTMLElement | null>,
-  lenisRef?: MutableRefObject<Lenis | null>,
-) {
+export function useHomeAnimations(rootRef: RefObject<HTMLElement | null>) {
   useLayoutEffect(() => {
     const root = rootRef.current;
     if (!root) return;
 
     ScrollTrigger.config({ limitCallbacks: true });
-
-    document.documentElement.classList.add("lenis", "lenis-smooth");
-
-    const lenis = new Lenis({
-      duration: prefersReducedMotion ? 0.6 : 1.05,
-      easing: (t) => Math.min(1, 1.001 - 2 ** (-10 * t)),
-      smoothWheel: !prefersReducedMotion,
-      syncTouch: false,
-      touchMultiplier: 1.1,
-      autoRaf: false,
-    });
-
-    connectLenisScrollTrigger(lenis);
-    const detachLenisTicker = attachLenisToGsapTicker(lenis);
-    if (lenisRef) lenisRef.current = lenis;
-    setWindowLenis(lenis);
 
     gsap.ticker.lagSmoothing(500, 33);
 
@@ -362,14 +336,7 @@ export function useHomeAnimations(
       resizeObserver.disconnect();
       window.removeEventListener("load", scheduleScrollTriggerRefresh);
       ctx.revert();
-      detachLenisTicker();
-      lenis.destroy();
-      if (lenisRef) lenisRef.current = null;
-      setWindowLenis(null);
-      ScrollTrigger.scrollerProxy(document.documentElement, {});
-      ScrollTrigger.clearScrollMemory();
-      document.documentElement.classList.remove("lenis", "lenis-smooth");
       root.classList.remove("home-animated");
     };
-  }, [rootRef, lenisRef]);
+  }, [rootRef]);
 }

@@ -5,7 +5,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { TransitionLink } from "@/components/shared/transition-link";
 import { useRef } from "react";
-import type Lenis from "lenis";
 
 const CinematicCylinderHero = dynamic(
   () =>
@@ -42,8 +41,7 @@ export function NirvanaHome({ products = [] }: { products?: Product[] }) {
   );
 
   const rootRef = useRef<HTMLDivElement>(null);
-  const lenisRef = useRef<Lenis | null>(null);
-  useHomeAnimations(rootRef, lenisRef);
+  useHomeAnimations(rootRef);
 
   return (
     <div ref={rootRef} className="relative overflow-x-hidden">
