@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { Instagram } from "lucide-react";
 import { useRef } from "react";
 
 import { useFooterTrail } from "@/lib/footer-trail/use-footer-trail";
@@ -15,11 +16,7 @@ const FOOTER_NAV = [
   { href: "/about", label: "About" },
 ];
 
-const FOOTER_SOCIAL = [
-  { href: "https://instagram.com", label: "Instagram", external: true },
-  { href: "https://x.com", label: "X", external: true },
-  { href: "https://linkedin.com", label: "LinkedIn", external: true },
-];
+const INSTAGRAM_URL = "https://www.instagram.com/nirvana.shades";
 
 const WORDMARK = "NIRVANA".split("");
 
@@ -48,11 +45,23 @@ export function NirvanaFooter() {
         <div className="nirvana-trail-footer__bottom">
           <div className="nirvana-trail-footer__bottom-grid">
             <div className="nirvana-trail-footer__brand">
-              <Link href="/" className="nirvana-trail-footer__brand-name">
-                NIRVANA
-              </Link>
+              <div className="nirvana-trail-footer__brand-row">
+                <Link href="/" className="nirvana-trail-footer__brand-name">
+                  NIRVANA
+                </Link>
+                <a
+                  href={INSTAGRAM_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Nirvana on Instagram"
+                  className="nirvana-trail-footer__instagram"
+                >
+                  <Instagram strokeWidth={1.5} aria-hidden />
+                </a>
+              </div>
               <p className="nirvana-trail-footer__brand-tagline">
-                Luxury eyewear crafted in muted greens and soft metallics.
+                Armless chain-mounted pieces — ear-supported, nose-balanced, with
+                crystal and jewelry drops at every finial.
               </p>
             </div>
 
@@ -61,30 +70,10 @@ export function NirvanaFooter() {
               aria-label="Footer navigation"
             >
               <p className="nirvana-trail-footer__nav-label">Explore</p>
-              <ul>
+              <ul className="nirvana-trail-footer__nav-list">
                 {FOOTER_NAV.map(({ href, label }) => (
                   <li key={href}>
                     <Link href={href}>{label}</Link>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-
-            <nav
-              className="nirvana-trail-footer__social"
-              aria-label="Social media"
-            >
-              <p className="nirvana-trail-footer__nav-label">Connect</p>
-              <ul>
-                {FOOTER_SOCIAL.map(({ href, label, external }) => (
-                  <li key={label}>
-                    <a
-                      href={href}
-                      target={external ? "_blank" : undefined}
-                      rel={external ? "noopener noreferrer" : undefined}
-                    >
-                      {label}
-                    </a>
                   </li>
                 ))}
               </ul>
@@ -93,7 +82,7 @@ export function NirvanaFooter() {
 
           <div className="nirvana-trail-footer__bottom-meta">
             <p className="nirvana-trail-footer__copyright">
-              © {new Date().getFullYear()} Nirvana Eyewear. All rights reserved.
+              © {new Date().getFullYear()} Nirvana. All rights reserved.
             </p>
           </div>
         </div>
@@ -142,10 +131,10 @@ export function NirvanaFooter() {
           </div>
 
           <p className="nirvana-trail-footer__hint">
-            Move your cursor to explore the collection
+            Move your cursor to explore the chain collection
           </p>
           <p className="nirvana-trail-footer__touch-hint">
-            Swipe to discover the frames
+            Swipe to discover the pieces
           </p>
         </div>
 

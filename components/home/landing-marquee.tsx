@@ -1,13 +1,12 @@
 "use client";
 
 const landingMarqueeItems = [
-  "Bespoke Elegance",
-  "Precision Crafted",
-  "Japanese Titanium",
-  "Hand-Polished Acetate",
-  "UV400 Max Protection",
-  "Timeless Silhouette",
-  "Optical Clarity",
+  "Ear-Supported Chains",
+  "Balance Chain Behind the Ear",
+  "Nose-Settled Bridge",
+  "Crystal & Jeweled Drops",
+  "Armless by Design",
+  "Chain-Mount Signature",
 ];
 
 export function LandingMarquee() {

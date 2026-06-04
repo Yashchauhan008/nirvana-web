@@ -15,18 +15,18 @@ export const cinematicCylinderImages = [
 
 export const cinematicPerspectives: Perspective[] = [
   {
-    title: "See beyond",
-    description: "Luxury eyewear · Est. 2026",
+    title: "Suspended elegance",
+    description: "Armless chain-mounted pieces · Est. 2026",
     position: "top",
   },
   {
-    title: "Pastel clarity",
-    description: "Hand-polished acetate & Japanese titanium",
+    title: "Ear-led balance",
+    description: "Front chains on the ear · a rear chain settles the bridge on your nose",
     position: "center",
   },
   {
-    title: "Architectural precision",
-    description: "Frames for those who wear intention",
+    title: "Crystal at the close",
+    description: "Finials of crystal and hanging jewelry at every chain end",
     position: "center",
   },
   {

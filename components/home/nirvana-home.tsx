@@ -18,19 +18,13 @@ import { LuxuryHero } from "@/components/home/luxury-hero";
 import { useHomeAnimations } from "@/components/home/use-home-animations";
 import { NirvanaFooter } from "@/components/home/nirvana-footer";
 import { homeImages } from "@/config/home-images";
+import { homeCopy } from "@/config/home-copy";
 import { zaslia } from "@/lib/fonts/zaslia";
 import type { Product } from "@/services/api/product.api";
 import { resolvePublicFileUrl } from "@/utils/resolvePublicFileUrl";
 import "@/styles/home.css";
 
-const MARQUEE = [
-  "Hand-polished acetate",
-  "Japanese titanium",
-  "UV400 protection",
-  "Bespoke fitting",
-  "Pastel clarity",
-  "Nirvana eyewear",
-];
+const MARQUEE = homeCopy.marquee;
 
 const NAV = [
   { href: "#main-hero", label: "Home" },
@@ -41,6 +35,12 @@ const NAV = [
 ];
 
 export function NirvanaHome({ products = [] }: { products?: Product[] }) {
+  const featuredProducts = products.filter(
+    (product) =>
+      product.is_featured === true ||
+      product.tags?.some((tag) => tag.toLowerCase() === "featured"),
+  );
+
   const rootRef = useRef<HTMLDivElement>(null);
   const lenisRef = useRef<Lenis | null>(null);
   useHomeAnimations(rootRef, lenisRef);
@@ -94,19 +94,19 @@ export function NirvanaHome({ products = [] }: { products?: Product[] }) {
             </p>
             <h2 className="font-display max-w-xl text-[clamp(2.25rem,5vw,4.25rem)] leading-[1.08]">
               <span data-reveal className="block">
-                Lightness is not absence —
+                No arms —
               </span>
               <span data-reveal className="block text-gradient italic">
-                it is refinement.
+                only chains that listen to the ear.
               </span>
             </h2>
             <p
               data-reveal
               className="font-body mt-10 max-w-xl text-base leading-relaxed text-[var(--nirvana-forest)]/85"
             >
-              Every Nirvana frame is sculpted in muted greens and soft
-              metallics, balancing weightless comfort with a silhouette that
-              commands quiet attention.
+              Each Nirvana piece is armless by design. Fine chains bear the weight
+              from the ear, a rear balance chain settles the bridge on your nose,
+              and crystal or jewelry drops close every line in quiet ceremony.
             </p>
           </div>
 
@@ -117,7 +117,7 @@ export function NirvanaHome({ products = [] }: { products?: Product[] }) {
             >
               <Image
                 src={homeImages.philosophyPrimary}
-                alt="Nirvana optical frame"
+                alt="Nirvana chain mount — front chains on ear"
                 fill
                 className="image-cover"
                 sizes="(max-width: 768px) 45vw, 320px"
@@ -129,7 +129,7 @@ export function NirvanaHome({ products = [] }: { products?: Product[] }) {
             >
               <Image
                 src={homeImages.philosophySecondary}
-                alt="Nirvana sunglasses"
+                alt="Nirvana balance chain behind the ear"
                 fill
                 className="image-cover"
                 sizes="(max-width: 768px) 45vw, 320px"
@@ -157,7 +157,7 @@ export function NirvanaHome({ products = [] }: { products?: Product[] }) {
             className="absolute inset-0 flex items-center justify-center px-6 text-center"
           >
             <p className="font-display max-w-2xl text-3xl text-[var(--nirvana-cream)] md:text-5xl">
-              Frames that feel like a second skin
+              Suspended from the ear, settled on the nose
             </p>
           </div>
         </div>
@@ -169,7 +169,7 @@ export function NirvanaHome({ products = [] }: { products?: Product[] }) {
             Editorial
           </p>
           <h2 className="font-display mt-2 text-4xl md:text-5xl">
-            The Nirvana gaze
+            The chain-worn gaze
           </h2>
         </div>
         <div className="mx-auto grid max-w-7xl gap-4 md:grid-cols-3">
@@ -206,8 +206,13 @@ export function NirvanaHome({ products = [] }: { products?: Product[] }) {
                 Collection
               </p>
               <h2 className="font-display mt-3 text-5xl md:text-6xl">
-                Curated frames
+                Chain-mounted pieces
               </h2>
+              <p className="font-body mt-4 max-w-md text-sm leading-relaxed text-[var(--nirvana-forest)]/75">
+                Not sunglasses with arms — each design hangs on ear-supported
+                chains, with a rear chain to balance the nose bridge and crystal
+                or jewelry at the ends.
+              </p>
             </div>
             <TransitionLink
               href="/products"
@@ -218,8 +223,8 @@ export function NirvanaHome({ products = [] }: { products?: Product[] }) {
           </div>
 
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {products && products.length > 0
-              ? products.map((product) => {
+            {featuredProducts.length > 0
+              ? featuredProducts.map((product) => {
                   const imageUrl =
                     resolvePublicFileUrl(
                       product.primary_image?.url ??
@@ -252,9 +257,11 @@ export function NirvanaHome({ products = [] }: { products?: Product[] }) {
                       </div>
                       <div className="p-5">
                         <p className="font-body-strong text-[10px] uppercase tracking-[0.25em] text-[var(--nirvana-leaf)]">
-                          {product.category?.name ||
-                            product.product_label ||
-                            "Eyewear"}
+                          {product.is_featured
+                            ? "Featured"
+                            : product.product_label ||
+                              product.category?.name ||
+                              "Chain piece"}
                         </p>
                         <div className="mt-1 flex items-baseline justify-between gap-2">
                           <h3 className="font-display text-2xl">
@@ -268,31 +275,12 @@ export function NirvanaHome({ products = [] }: { products?: Product[] }) {
                     </TransitionLink>
                   );
                 })
-              : homeImages.collection.map((item) => (
-                  <article
-                    key={item.name}
-                    data-collection-card
-                    className="frame-card group overflow-hidden rounded-3xl bg-white/40"
-                  >
-                    <div className="relative aspect-[3/4] overflow-hidden">
-                      <Image
-                        src={item.image}
-                        alt={item.name}
-                        fill
-                        className="image-cover transition-transform duration-700 group-hover:scale-105"
-                        sizes="(max-width: 768px) 50vw, 33vw"
-                      />
-                    </div>
-                    <div className="p-5">
-                      <p className="font-body-strong text-[10px] uppercase tracking-[0.25em] text-[var(--nirvana-leaf)]">
-                        {item.tag}
-                      </p>
-                      <h3 className="font-display mt-1 text-2xl">
-                        {item.name}
-                      </h3>
-                    </div>
-                  </article>
-                ))}
+              : (
+                <p className="font-body col-span-full py-12 text-center text-sm text-[var(--nirvana-forest)]/60">
+                  Featured pieces coming soon. Mark products as featured in
+                  admin to show them here.
+                </p>
+              )}
           </div>
         </div>
       </section>
@@ -305,7 +293,7 @@ export function NirvanaHome({ products = [] }: { products?: Product[] }) {
           >
             <Image
               src={homeImages.craft}
-              alt="Nirvana craftsmanship"
+              alt="Nirvana chain craftsmanship"
               fill
               className="image-cover"
               sizes="(max-width: 1024px) 100vw, 50vw"
@@ -316,17 +304,17 @@ export function NirvanaHome({ products = [] }: { products?: Product[] }) {
               Craftsmanship
             </p>
             <h2 className="font-display mt-4 text-5xl leading-tight md:text-6xl">
-              Engineered for the gaze
+              Engineered as chain jewelry
             </h2>
             <p className="font-body mt-6 text-base leading-relaxed text-[var(--nirvana-forest)]/85">
-              Beta-titanium temples, hand-beveled acetate, and lenses tuned for
-              clarity in every light. Nirvana frames are measured, adjusted, and
-              finished in small batches — never mass-produced.
+              We forge front chains that drape from the ear, a balance chain that
+              runs behind it to seat the bridge on your nose, and finials of
+              crystal or hanging jewelry — never mass temple arms.
             </p>
             <ul className="font-body mt-8 space-y-3 text-sm text-[var(--nirvana-forest)]">
-              <li>— Anti-reflective coating</li>
-              <li>— Adjustable nose architecture</li>
-              <li>— Lifetime alignment service</li>
+              <li>— Ear-supported front chains</li>
+              <li>— Rear balance chain for nose settle</li>
+              <li>— Crystal & jeweled end drops</li>
             </ul>
           </div>
         </div>
@@ -338,9 +326,9 @@ export function NirvanaHome({ products = [] }: { products?: Product[] }) {
       >
         <div className="mx-auto grid max-w-7xl gap-8 sm:grid-cols-3">
           {[
-            { value: "12K+", label: "Frames fitted" },
-            { value: "48hr", label: "Custom turnaround" },
-            { value: "100%", label: "Sustainable acetate" },
+            { value: "2×", label: "Chains per piece" },
+            { value: "◆", label: "Crystal finials" },
+            { value: "0", label: "Temple arms" },
           ].map((stat) => (
             <div
               key={stat.label}
@@ -372,21 +360,22 @@ export function NirvanaHome({ products = [] }: { products?: Product[] }) {
           />
           <div className="relative z-10">
             <p className="font-body-strong text-[11px] uppercase tracking-[0.35em] text-[var(--nirvana-mint)]">
-              Begin your fitting
+              Begin your chain fitting
             </p>
             <h2 className="font-display mt-4 text-4xl text-[var(--nirvana-cream)] md:text-6xl">
               Find your Nirvana
             </h2>
             <p className="font-body mx-auto mt-4 max-w-lg text-sm text-[var(--nirvana-mint)]/95">
-              Visit our studio or explore the collection online. Every pair
-              includes a bespoke adjustment session.
+              Visit our studio or explore the collection online. Every piece is
+              tuned for ear support, nose balance, and your choice of crystal or
+              jewelry drops.
             </p>
             <div className="mt-10 flex flex-wrap justify-center gap-4">
               <TransitionLink
                 href="/products"
                 className="font-body-strong rounded-full bg-[var(--nirvana-cream)] px-8 py-3.5 text-sm tracking-[0.12em] text-[var(--nirvana-deep)]"
               >
-                Shop eyewear
+                Explore chain pieces
               </TransitionLink>
               <Link
                 href="/contact"

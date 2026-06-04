@@ -9,6 +9,7 @@ import "lenis/dist/lenis.css";
 import {
   attachLenisToGsapTicker,
   connectLenisScrollTrigger,
+  setWindowLenis,
   scheduleScrollTriggerRefresh,
 } from "@/lib/scroll/lenis-scroll";
 
@@ -49,7 +50,7 @@ export function useHomeAnimations(
     connectLenisScrollTrigger(lenis);
     const detachLenisTicker = attachLenisToGsapTicker(lenis);
     if (lenisRef) lenisRef.current = lenis;
-    (window as any).lenis = lenis;
+    setWindowLenis(lenis);
 
     gsap.ticker.lagSmoothing(500, 33);
 
@@ -364,7 +365,7 @@ export function useHomeAnimations(
       detachLenisTicker();
       lenis.destroy();
       if (lenisRef) lenisRef.current = null;
-      (window as any).lenis = null;
+      setWindowLenis(null);
       ScrollTrigger.scrollerProxy(document.documentElement, {});
       ScrollTrigger.clearScrollMemory();
       document.documentElement.classList.remove("lenis", "lenis-smooth");

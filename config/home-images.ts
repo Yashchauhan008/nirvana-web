@@ -19,11 +19,11 @@ export const homeImages = {
     "/images/models/model2.png",
   ],
   collection: [
-    { name: "Aurora", tag: "Optical", image: "/images/models/model3.png" },
-    { name: "Solstice", tag: "Sunglasses", image: "/images/models/model4.png" },
-    { name: "Nocturne", tag: "Limited", image: "/images/models/model5.png" },
-    { name: "Ethereal", tag: "Titanium", image: "/images/models/model1.png" },
-    { name: "Serene", tag: "Acetate", image: "/images/models/model2.png" },
-    { name: "Lumen", tag: "Polarized", image: "/images/models/model3.png" },
+    { name: "Crystal Tide", tag: "Crystal drop", image: "/images/models/model3.png" },
+    { name: "Solstice", tag: "Dual-chain balance", image: "/images/models/model4.png" },
+    { name: "Nocturne", tag: "Limited chain", image: "/images/models/model5.png" },
+    { name: "Ethereal", tag: "Ear mount", image: "/images/models/model1.png" },
+    { name: "Serene", tag: "Jeweled hang", image: "/images/models/model2.png" },
+    { name: "Lumen", tag: "Signature chain", image: "/images/models/model3.png" },
   ],
 } as const;

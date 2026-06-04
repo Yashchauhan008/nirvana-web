@@ -63,17 +63,17 @@ export function LuxuryHero() {
             >
               <span className="flex h-2 w-2 rounded-full bg-[var(--nirvana-leaf)] animate-ping" />
               <p className="font-body-strong text-[10px] uppercase tracking-[0.3em] text-[var(--nirvana-forest)]">
-                The New Signature Series
+                Chain-Mount Signature
               </p>
             </div>
 
             <h1 className="font-display text-[clamp(3.5rem,8vw,8.5rem)] leading-[0.88] tracking-tighter text-[var(--nirvana-deep)] drop-shadow-sm">
               <span className="line-reveal block" data-hero-line>
-                <span className="line-reveal__text">Redefine</span>
+                <span className="line-reveal__text">Wear without</span>
               </span>
               <span className="line-reveal block" data-hero-line>
                 <span className="line-reveal__text text-transparent bg-clip-text bg-gradient-to-r from-[var(--nirvana-forest)] via-[var(--nirvana-leaf)] to-[var(--nirvana-gold)] italic pr-4">
-                  Vision
+                  Arms
                 </span>
               </span>
             </h1>
@@ -82,8 +82,9 @@ export function LuxuryHero() {
               data-hero-fade
               className="font-body mt-8 max-w-lg text-lg leading-relaxed text-[var(--nirvana-forest)]/80"
             >
-              Experience eyewear reimagined. Where cutting-edge architectural
-              precision meets effortless, weightless comfort.
+              Nirvana pieces hang from the ear on fine chains — never temple arms.
+              A balance chain behind the ear guides the bridge onto your nose, while
+              crystal and jewelry drops finish every line.
             </p>
 
             <div
@@ -101,7 +102,7 @@ export function LuxuryHero() {
                 href="/contact"
                 className="group flex h-14 items-center justify-center rounded-full border border-[var(--nirvana-sage)] bg-white/30 px-10 font-body-strong text-sm uppercase tracking-[0.18em] text-[var(--nirvana-forest)] backdrop-blur-sm transition-all hover:bg-white/60 hover:shadow-lg"
               >
-                Book Fitting
+                Book Consultation
               </Link>
             </div>
 
@@ -112,28 +113,28 @@ export function LuxuryHero() {
             >
               <div className="flex flex-col gap-1">
                 <span className="font-display text-2xl text-[var(--nirvana-deep)]">
-                  4g
+                  2×
                 </span>
                 <span className="font-body text-[10px] uppercase tracking-wider text-[var(--nirvana-forest)]/60">
-                  Titanium frame
+                  Chain balance
                 </span>
               </div>
               <div className="h-8 w-px bg-[var(--nirvana-sage)]/50" />
               <div className="flex flex-col gap-1">
                 <span className="font-display text-2xl text-[var(--nirvana-deep)]">
-                  UV400
+                  ◆
                 </span>
                 <span className="font-body text-[10px] uppercase tracking-wider text-[var(--nirvana-forest)]/60">
-                  Max protection
+                  Crystal drops
                 </span>
               </div>
               <div className="h-8 w-px bg-[var(--nirvana-sage)]/50" />
               <div className="flex flex-col gap-1">
                 <span className="font-display text-2xl text-[var(--nirvana-deep)]">
-                  100%
+                  0
                 </span>
                 <span className="font-body text-[10px] uppercase tracking-wider text-[var(--nirvana-forest)]/60">
-                  Bespoke fit
+                  Temple arms
                 </span>
               </div>
             </div>
@@ -156,7 +157,7 @@ export function LuxuryHero() {
                 <div className="group absolute left-[-5%] top-[10%] w-[55%] aspect-[3/4] z-10 rounded-[2rem] overflow-hidden border-4 border-white/80 shadow-[0_20px_40px_rgba(42,69,56,0.15)] -rotate-6 transition-all duration-700 hover:rotate-0 hover:scale-110 hover:z-30 hover:shadow-[0_30px_60px_rgba(42,69,56,0.3)]">
                   <Image
                     src={homeImages.heroImages[1]}
-                    alt="Nirvana lifestyle at the beach"
+                    alt="Nirvana chain-mounted piece at the beach"
                     fill
                     className="object-cover transition-transform duration-1000 group-hover:scale-105"
                     sizes="(max-width: 1024px) 40vw, 25vw"
@@ -168,7 +169,7 @@ export function LuxuryHero() {
                 <div className="group absolute right-[-5%] top-[25%] w-[55%] aspect-[3/4] z-10 rounded-[2rem] overflow-hidden border-4 border-white/80 shadow-[0_20px_40px_rgba(42,69,56,0.15)] rotate-6 transition-all duration-700 hover:rotate-0 hover:scale-110 hover:z-30 hover:shadow-[0_30px_60px_rgba(42,69,56,0.3)]">
                   <Image
                     src={homeImages.heroImages[2]}
-                    alt="Nirvana lifestyle urban"
+                    alt="Nirvana chain-hung piece — urban"
                     fill
                     className="object-cover transition-transform duration-1000 group-hover:scale-105"
                     sizes="(max-width: 1024px) 40vw, 25vw"
@@ -180,7 +181,7 @@ export function LuxuryHero() {
                 <div className="group absolute w-[65%] aspect-[3/4] z-20 rounded-[2.5rem] overflow-hidden border-[6px] border-white shadow-[0_30px_60px_rgba(42,69,56,0.25)] transition-all duration-700 hover:scale-105 hover:-translate-y-4 hover:shadow-[0_40px_80px_rgba(42,69,56,0.35)]">
                   <Image
                     src={homeImages.heroImages[0]}
-                    alt="Nirvana elegant evening look"
+                    alt="Nirvana crystal-drop chain piece"
                     fill
                     priority
                     className="object-cover transition-transform duration-1000 group-hover:scale-105"
@@ -197,10 +198,10 @@ export function LuxuryHero() {
                   </div>
                   <div>
                     <p className="font-body-strong text-[9px] uppercase tracking-widest text-[var(--nirvana-leaf)]">
-                      Signature Series
+                      Chain-Mount Series
                     </p>
                     <p className="font-display mt-0.5 text-lg text-[var(--nirvana-deep)]">
-                      Everyday Luxury
+                      Ear-Suspended
                     </p>
                   </div>
                 </div>
@@ -214,7 +215,7 @@ export function LuxuryHero() {
                   </div>
                   <div className="pr-2">
                     <p className="font-display text-sm text-[var(--nirvana-deep)]">
-                      Hand-polished
+                      Jeweled finials
                     </p>
                   </div>
                 </div>

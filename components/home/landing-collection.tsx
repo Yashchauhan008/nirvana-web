@@ -14,7 +14,7 @@ export function LandingCollection() {
         </p>
         <div className="mt-6 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <h2 data-section-head className="font-display text-[clamp(2.5rem,6vw,4.5rem)] leading-[1.02] text-[var(--ln-champagne)]">
-            Curated for the discerning
+            Chain-mounted for the discerning
           </h2>
           <Link
             href="/products"

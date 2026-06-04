@@ -25,8 +25,13 @@ export default async function ProductsPage() {
               Discover
             </span>
             <h1 className="font-display mt-4 text-5xl md:text-7xl text-[var(--nirvana-deep)]">
-              The Collection
+              Chain-Mounted Collection
             </h1>
+            <p className="font-body mt-6 max-w-xl text-base leading-relaxed text-[var(--nirvana-forest)]/80">
+              Armless pieces that hang from the ear on chains — with a balance
+              chain behind the ear to seat the bridge, and crystal or jewelry at
+              the ends.
+            </p>
           </div>
         </div>
       </section>
@@ -72,7 +77,7 @@ export default async function ProductsPage() {
                         <span className="font-body-strong text-[10px] uppercase tracking-widest text-[var(--nirvana-deep)]">
                           {product.category?.name ||
                             product.product_label ||
-                            "Eyewear"}
+                            "Chain piece"}
                         </span>
                       </div>
                     </div>
@@ -84,7 +89,7 @@ export default async function ProductsPage() {
                           {product.name}
                         </h3>
                         <p className="font-body text-[var(--nirvana-sage)] mt-1">
-                          Hand-polished Acetate
+                          Ear chains · crystal finials
                         </p>
                       </div>
                       <div className="text-right">
@@ -130,7 +135,7 @@ export default async function ProductsPage() {
                           {product.name}
                         </h3>
                         <p className="font-body text-[var(--nirvana-sage)] mt-1">
-                          Hand-polished Acetate
+                          Ear chains · crystal finials
                         </p>
                       </div>
                       <div className="text-right">

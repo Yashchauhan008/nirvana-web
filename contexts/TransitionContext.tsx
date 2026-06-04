@@ -11,6 +11,10 @@ import { usePathname, useRouter } from "next/navigation";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { svgTransitionPaths as paths } from "@/lib/svg-path-transition/paths";
+import {
+  scrollWindowToHash,
+  scrollWindowToTop,
+} from "@/lib/scroll/lenis-scroll";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -32,26 +36,11 @@ export function useTransitionContext() {
 }
 
 function scrollToHash(hash: string) {
-  const el = document.querySelector<HTMLElement>(hash);
-  if (!el) return;
-
-  const lenis = (window as Window & { lenis?: { scrollTo: (t: HTMLElement, o: { offset: number; immediate: boolean }) => void } }).lenis;
-  if (lenis) {
-    lenis.scrollTo(el, { offset: -HEADER_OFFSET, immediate: true });
-    return;
-  }
-
-  const top = el.getBoundingClientRect().top + window.scrollY - HEADER_OFFSET;
-  window.scrollTo({ top, left: 0 });
+  scrollWindowToHash(hash, HEADER_OFFSET);
 }
 
 function scrollToTop() {
-  const lenis = (window as Window & { lenis?: { scrollTo: (n: number, o: { immediate: boolean }) => void } }).lenis;
-  if (lenis) {
-    lenis.scrollTo(0, { immediate: true });
-  } else {
-    window.scrollTo({ top: 0, left: 0 });
-  }
+  scrollWindowToTop();
 }
 
 function resetOverlay(pathEl: SVGPathElement | null) {

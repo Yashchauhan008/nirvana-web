@@ -161,17 +161,37 @@
 .nirvana-trail-footer__bottom-meta,
 .nirvana-trail-footer__bottom-grid,
 .nirvana-trail-footer__brand,
-.nirvana-trail-footer__nav,
-.nirvana-trail-footer__social {
+.nirvana-trail-footer__nav {
   pointer-events: auto;
 }
 
 .nirvana-trail-footer__bottom-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) minmax(0, 1fr);
-  gap: 2.5rem 3rem;
+  grid-template-columns: minmax(0, 1fr) minmax(0, auto);
+  align-items: start;
+  column-gap: 3rem;
+  row-gap: 0.75rem;
   max-width: 80rem;
   margin: 0 auto;
+}
+
+.nirvana-trail-footer__brand {
+  grid-column: 1;
+  justify-self: start;
+  align-self: start;
+}
+
+.nirvana-trail-footer__brand-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.nirvana-trail-footer__nav {
+  grid-column: 2;
+  justify-self: end;
+  align-self: start;
+  text-align: right;
 }
 
 .nirvana-trail-footer__brand-name {
@@ -202,6 +222,9 @@
 
 .nirvana-trail-footer__nav-label {
   margin: 0 0 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
   font-family: ui-sans-serif, system-ui, sans-serif;
   font-size: 10px;
   font-weight: 600;
@@ -211,17 +234,48 @@
   opacity: 0.4;
 }
 
-.nirvana-trail-footer__nav ul,
-.nirvana-trail-footer__social ul {
+.nirvana-trail-footer__nav ul {
   list-style: none;
   margin: 0;
   padding: 0;
   display: flex;
+}
+
+.nirvana-trail-footer__nav-list {
   flex-direction: column;
+  align-items: flex-end;
   gap: 0.65rem;
 }
 
-.nirvana-trail-footer__bottom a {
+.nirvana-trail-footer__instagram {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  background: none;
+  color: var(--nirvana-forest);
+  opacity: 0.65;
+  transition: opacity 0.2s ease, color 0.2s ease;
+}
+
+.nirvana-trail-footer__instagram svg {
+  width: 1.125rem;
+  height: 1.125rem;
+}
+
+.nirvana-trail-footer__instagram::after {
+  display: none;
+}
+
+.nirvana-trail-footer__instagram:hover {
+  opacity: 1;
+  color: var(--nirvana-deep);
+}
+
+.nirvana-trail-footer__bottom a:not(.nirvana-trail-footer__instagram) {
   position: relative;
   display: inline-block;
   width: fit-content;
@@ -236,7 +290,7 @@
   transition: color 0.2s ease, opacity 0.2s ease;
 }
 
-.nirvana-trail-footer__bottom a::after {
+.nirvana-trail-footer__bottom a:not(.nirvana-trail-footer__instagram)::after {
   content: "";
   position: absolute;
   left: 0;
@@ -247,12 +301,12 @@
   transition: width 0.25s ease;
 }
 
-.nirvana-trail-footer__bottom a:hover {
+.nirvana-trail-footer__bottom a:not(.nirvana-trail-footer__instagram):hover {
   opacity: 1;
   color: var(--nirvana-deep);
 }
 
-.nirvana-trail-footer__bottom a:hover::after {
+.nirvana-trail-footer__bottom a:not(.nirvana-trail-footer__instagram):hover::after {
   width: 100%;
 }
 
@@ -340,7 +394,25 @@
 
   .nirvana-trail-footer__bottom-grid {
     grid-template-columns: 1fr;
-    gap: 2rem;
+    gap: 1.5rem;
+  }
+
+  .nirvana-trail-footer__brand,
+  .nirvana-trail-footer__nav {
+    grid-column: 1;
+    justify-self: stretch;
+  }
+
+  .nirvana-trail-footer__nav {
+    text-align: left;
+  }
+
+  .nirvana-trail-footer__nav-label {
+    justify-content: flex-start;
+  }
+
+  .nirvana-trail-footer__nav-list {
+    align-items: flex-start;
   }
 
   .nirvana-trail-footer__hint {

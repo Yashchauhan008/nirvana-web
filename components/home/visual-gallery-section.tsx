@@ -78,8 +78,8 @@ export function VisualGallerySection() {
                 NIRVANA
               </p>
               <p className="font-body mt-4 max-w-sm text-sm leading-relaxed text-[var(--nirvana-mint)]/75">
-                Luxury eyewear crafted in muted greens and soft metallics —
-                frames for those who wear intention.
+                Armless pieces on ear-supported chains — a rear balance chain
+                settles the nose bridge; crystal and jewelry finish every drop.
               </p>
             </div>
 
@@ -100,7 +100,7 @@ export function VisualGallerySection() {
                 href="/products"
                 className="font-body-strong w-fit rounded-full border border-[var(--nirvana-sage)]/60 px-7 py-3 text-[11px] uppercase tracking-[0.2em] text-[var(--nirvana-cream)] transition-colors hover:bg-[var(--nirvana-forest)]"
               >
-                View all frames
+                View all pieces
               </Link>
               <p className="font-body text-[10px] uppercase tracking-[0.18em] text-[var(--nirvana-mint)]/50">
                 © {new Date().getFullYear()} Nirvana Eyewear

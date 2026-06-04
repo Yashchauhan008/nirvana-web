@@ -17,8 +17,9 @@ export default function ContactPage() {
             Contact
           </h1>
           <p className="font-body mt-6 text-base leading-relaxed text-[var(--nirvana-forest)]/85">
-            Questions about a frame, a fitting, or a bespoke order — send us a
-            message and we&apos;ll respond within one business day.
+            Questions about a chain piece, ear balance, or a bespoke crystal
+            drop — send us a message and we&apos;ll respond within one business
+            day.
           </p>
         </div>
       </section>
