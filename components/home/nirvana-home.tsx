@@ -3,6 +3,7 @@
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
+import { TransitionLink } from "@/components/shared/transition-link";
 import { useRef } from "react";
 import type Lenis from "lenis";
 
@@ -35,8 +36,8 @@ const NAV = [
   { href: "#main-hero", label: "Home" },
   { href: "#cinematic-hero", label: "Experience" },
   { href: "#philosophy", label: "Philosophy" },
-  { href: "#collection", label: "Collection" },
-  { href: "/products", label: "Shop" },
+  { href: "/products", label: "Collection" },
+  { href: "/contact", label: "Contact" },
 ];
 
 export function NirvanaHome({ products = [] }: { products?: Product[] }) {
@@ -45,11 +46,7 @@ export function NirvanaHome({ products = [] }: { products?: Product[] }) {
   useHomeAnimations(rootRef, lenisRef);
 
   return (
-    <div
-      ref={rootRef}
-      className="relative overflow-x-hidden"
-    >
-
+    <div ref={rootRef} className="relative overflow-x-hidden">
       <LuxuryHero />
 
       <CinematicCylinderHero />
@@ -212,86 +209,90 @@ export function NirvanaHome({ products = [] }: { products?: Product[] }) {
                 Curated frames
               </h2>
             </div>
-            <Link
+            <TransitionLink
               href="/products"
               className="font-body-strong text-sm uppercase tracking-[0.2em] text-[var(--nirvana-forest)] underline-offset-4 hover:underline"
             >
               View all pieces →
-            </Link>
+            </TransitionLink>
           </div>
 
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {products && products.length > 0 ? (
-              products.map((product) => {
-                const imageUrl =
-                  resolvePublicFileUrl(
-                    product.primary_image?.url ??
-                      product.images?.find((i) => i.is_primary)?.image?.url ??
-                      product.images?.[0]?.image?.url,
-                  ) || "/images/models/model3.png";
+            {products && products.length > 0
+              ? products.map((product) => {
+                  const imageUrl =
+                    resolvePublicFileUrl(
+                      product.primary_image?.url ??
+                        product.images?.find((i) => i.is_primary)?.image?.url ??
+                        product.images?.[0]?.image?.url,
+                    ) || "/images/models/model3.png";
 
-                const displayPrice = new Intl.NumberFormat("en-IN", {
-                  style: "currency",
-                  currency: "INR",
-                  maximumFractionDigits: 0,
-                }).format(product.sale_price_in_rupee);
+                  const displayPrice = new Intl.NumberFormat("en-IN", {
+                    style: "currency",
+                    currency: "INR",
+                    maximumFractionDigits: 0,
+                  }).format(product.sale_price_in_rupee);
 
-                return (
-                  <Link
-                    key={product.id}
-                    href={`/products/${product.id}`}
+                  return (
+                    <TransitionLink
+                      key={product.id}
+                      href={`/products/${product.id}`}
+                      data-collection-card
+                      className="frame-card group block overflow-hidden rounded-3xl bg-white/40"
+                    >
+                      <div className="relative aspect-[3/4] overflow-hidden">
+                        <Image
+                          src={imageUrl}
+                          alt={product.name}
+                          fill
+                          className="image-cover transition-transform duration-700 group-hover:scale-105"
+                          sizes="(max-width: 768px) 50vw, 33vw"
+                          unoptimized={imageUrl.startsWith("http://")}
+                        />
+                      </div>
+                      <div className="p-5">
+                        <p className="font-body-strong text-[10px] uppercase tracking-[0.25em] text-[var(--nirvana-leaf)]">
+                          {product.category?.name ||
+                            product.product_label ||
+                            "Eyewear"}
+                        </p>
+                        <div className="mt-1 flex items-baseline justify-between gap-2">
+                          <h3 className="font-display text-2xl">
+                            {product.name}
+                          </h3>
+                          <span className="font-body-strong text-sm text-[var(--nirvana-forest)]">
+                            {displayPrice}
+                          </span>
+                        </div>
+                      </div>
+                    </TransitionLink>
+                  );
+                })
+              : homeImages.collection.map((item) => (
+                  <article
+                    key={item.name}
                     data-collection-card
-                    className="frame-card group block overflow-hidden rounded-3xl bg-white/40"
+                    className="frame-card group overflow-hidden rounded-3xl bg-white/40"
                   >
                     <div className="relative aspect-[3/4] overflow-hidden">
                       <Image
-                        src={imageUrl}
-                        alt={product.name}
+                        src={item.image}
+                        alt={item.name}
                         fill
                         className="image-cover transition-transform duration-700 group-hover:scale-105"
                         sizes="(max-width: 768px) 50vw, 33vw"
-                        unoptimized={imageUrl.startsWith("http://")}
                       />
                     </div>
                     <div className="p-5">
                       <p className="font-body-strong text-[10px] uppercase tracking-[0.25em] text-[var(--nirvana-leaf)]">
-                        {product.category?.name || product.product_label || "Eyewear"}
+                        {item.tag}
                       </p>
-                      <div className="mt-1 flex items-baseline justify-between gap-2">
-                        <h3 className="font-display text-2xl">{product.name}</h3>
-                        <span className="font-body-strong text-sm text-[var(--nirvana-forest)]">
-                          {displayPrice}
-                        </span>
-                      </div>
+                      <h3 className="font-display mt-1 text-2xl">
+                        {item.name}
+                      </h3>
                     </div>
-                  </Link>
-                );
-              })
-            ) : (
-              homeImages.collection.map((item) => (
-                <article
-                  key={item.name}
-                  data-collection-card
-                  className="frame-card group overflow-hidden rounded-3xl bg-white/40"
-                >
-                  <div className="relative aspect-[3/4] overflow-hidden">
-                    <Image
-                      src={item.image}
-                      alt={item.name}
-                      fill
-                      className="image-cover transition-transform duration-700 group-hover:scale-105"
-                      sizes="(max-width: 768px) 50vw, 33vw"
-                    />
-                  </div>
-                  <div className="p-5">
-                    <p className="font-body-strong text-[10px] uppercase tracking-[0.25em] text-[var(--nirvana-leaf)]">
-                      {item.tag}
-                    </p>
-                    <h3 className="font-display mt-1 text-2xl">{item.name}</h3>
-                  </div>
-                </article>
-              ))
-            )}
+                  </article>
+                ))}
           </div>
         </div>
       </section>
@@ -381,12 +382,12 @@ export function NirvanaHome({ products = [] }: { products?: Product[] }) {
               includes a bespoke adjustment session.
             </p>
             <div className="mt-10 flex flex-wrap justify-center gap-4">
-              <Link
+              <TransitionLink
                 href="/products"
                 className="font-body-strong rounded-full bg-[var(--nirvana-cream)] px-8 py-3.5 text-sm tracking-[0.12em] text-[var(--nirvana-deep)]"
               >
                 Shop eyewear
-              </Link>
+              </TransitionLink>
               <Link
                 href="/contact"
                 className="font-body-strong rounded-full border border-[var(--nirvana-mint)]/50 px-8 py-3.5 text-sm uppercase tracking-[0.18em] text-[var(--nirvana-cream)]"

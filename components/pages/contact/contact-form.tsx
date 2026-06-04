@@ -52,19 +52,19 @@ export function ContactForm() {
   if (done) {
     return (
       <div className="flex flex-col items-center justify-center gap-3 py-16 text-center">
-        <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary/10">
-          <Send className="h-6 w-6 text-primary" />
+        <div className="flex h-14 w-14 items-center justify-center rounded-full bg-[var(--nirvana-mist)]">
+          <Send className="h-6 w-6 text-[var(--nirvana-forest)]" />
         </div>
-        <h3 className="font-michroma text-lg font-semibold text-foreground">
+        <h3 className="font-display text-xl text-[var(--nirvana-deep)]">
           Message sent!
         </h3>
-        <p className="text-sm text-muted-foreground">
+        <p className="font-body text-sm text-[var(--nirvana-forest)]/70">
           We&apos;ll get back to you within 24 hours.
         </p>
         <button
           type="button"
           onClick={() => setDone(false)}
-          className="mt-2 text-sm text-primary underline underline-offset-4 hover:opacity-80"
+          className="font-body-strong mt-2 text-sm text-[var(--nirvana-forest)] underline underline-offset-4 hover:opacity-80"
         >
           Send another message
         </button>
@@ -72,12 +72,16 @@ export function ContactForm() {
     );
   }
 
+  const fieldClass =
+    "border-0 border-b border-[var(--nirvana-sage)]/50 bg-transparent pb-2 font-body text-sm text-[var(--nirvana-deep)] placeholder:text-[var(--nirvana-forest)]/35 focus:border-[var(--nirvana-forest)] focus:outline-none transition-colors";
+  const labelClass =
+    "font-body-strong text-[11px] uppercase tracking-[0.12em] text-[var(--nirvana-forest)]/70";
+
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-8">
-      {/* Row 1: First Name + Last Name */}
       <div className="grid gap-8 sm:grid-cols-2">
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="contact-first_name" className="text-xs font-medium text-muted-foreground">
+          <label htmlFor="contact-first_name" className={labelClass}>
             First Name{requiredStar}
           </label>
           <input
@@ -86,11 +90,11 @@ export function ContactForm() {
             name="first_name"
             required
             placeholder=""
-            className="border-0 border-b border-border bg-transparent pb-2 text-sm text-foreground placeholder:text-muted-foreground/40 focus:border-primary focus:outline-none transition-colors"
+            className={fieldClass}
           />
         </div>
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="contact-last_name" className="text-xs font-medium text-muted-foreground">
+          <label htmlFor="contact-last_name" className={labelClass}>
             Last Name{requiredStar}
           </label>
           <input
@@ -99,27 +103,26 @@ export function ContactForm() {
             name="last_name"
             required
             placeholder="Doe"
-            className="border-0 border-b border-border bg-transparent pb-2 text-sm text-foreground placeholder:text-muted-foreground/40 focus:border-primary focus:outline-none transition-colors"
+            className={fieldClass}
           />
         </div>
       </div>
 
-      {/* Row 2: Email + Phone */}
       <div className="grid gap-8 sm:grid-cols-2">
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="contact-email" className="text-xs font-medium text-muted-foreground">
-            Email <span className="text-muted-foreground/70">(optional)</span>
+          <label htmlFor="contact-email" className={labelClass}>
+            Email <span className="normal-case tracking-normal opacity-70">(optional)</span>
           </label>
           <input
             id="contact-email"
             type="email"
             name="email"
             placeholder="you@example.com"
-            className="border-0 border-b border-border bg-transparent pb-2 text-sm text-foreground placeholder:text-muted-foreground/40 focus:border-primary focus:outline-none transition-colors"
+            className={fieldClass}
           />
         </div>
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="contact-phone" className="text-xs font-medium text-muted-foreground">
+          <label htmlFor="contact-phone" className={labelClass}>
             Phone Number{requiredStar}
           </label>
           <input
@@ -128,32 +131,30 @@ export function ContactForm() {
             name="phone"
             required
             placeholder="+91 012 3456 789"
-            className="border-0 border-b border-border bg-transparent pb-2 text-sm text-foreground placeholder:text-muted-foreground/40 focus:border-primary focus:outline-none transition-colors"
+            className={fieldClass}
           />
         </div>
       </div>
 
-      {/* Row 3: Message */}
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="contact-message" className="text-xs font-medium text-muted-foreground">
+        <label htmlFor="contact-message" className={labelClass}>
           Message{requiredStar}
         </label>
         <textarea
           id="contact-message"
           name="message"
           required
-          rows={3}
+          rows={4}
           placeholder="Write your message.."
-          className="resize-none border-0 border-b border-border bg-transparent pb-2 text-sm text-foreground placeholder:text-muted-foreground/40 focus:border-primary focus:outline-none transition-colors"
+          className={`${fieldClass} resize-none`}
         />
       </div>
 
-      {/* Submit */}
       <div className="flex justify-end">
         <Button
           type="submit"
           disabled={pending}
-          className="rounded-xl bg-primary px-8 py-3 text-sm font-semibold text-primary-foreground hover:bg-primary/90 disabled:opacity-60"
+          className="rounded-full bg-[var(--nirvana-forest)] px-8 py-3 font-body-strong text-sm tracking-[0.08em] text-[var(--nirvana-cream)] hover:bg-[var(--nirvana-deep)] disabled:opacity-60"
         >
           {pending ? "Sending…" : "Send Message"}
         </Button>

@@ -1,12 +1,20 @@
 "use client";
 
-import React, { createContext, useContext, useRef, useEffect, useCallback } from "react";
+import React, {
+  createContext,
+  useContext,
+  useRef,
+  useEffect,
+  useCallback,
+} from "react";
 import { usePathname, useRouter } from "next/navigation";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { svgTransitionPaths as paths } from "@/lib/svg-path-transition/paths";
 
 gsap.registerPlugin(ScrollTrigger);
+
+const HEADER_OFFSET = 88;
 
 interface TransitionContextType {
   navigateWithTransition: (target: string) => Promise<void>;
@@ -23,11 +31,51 @@ export function useTransitionContext() {
   return context;
 }
 
+function scrollToHash(hash: string) {
+  const el = document.querySelector<HTMLElement>(hash);
+  if (!el) return;
+
+  const lenis = (window as Window & { lenis?: { scrollTo: (t: HTMLElement, o: { offset: number; immediate: boolean }) => void } }).lenis;
+  if (lenis) {
+    lenis.scrollTo(el, { offset: -HEADER_OFFSET, immediate: true });
+    return;
+  }
+
+  const top = el.getBoundingClientRect().top + window.scrollY - HEADER_OFFSET;
+  window.scrollTo({ top, left: 0 });
+}
+
+function scrollToTop() {
+  const lenis = (window as Window & { lenis?: { scrollTo: (n: number, o: { immediate: boolean }) => void } }).lenis;
+  if (lenis) {
+    lenis.scrollTo(0, { immediate: true });
+  } else {
+    window.scrollTo({ top: 0, left: 0 });
+  }
+}
+
+function resetOverlay(pathEl: SVGPathElement | null) {
+  if (!pathEl) return;
+  gsap.killTweensOf(pathEl);
+  gsap.set(pathEl, { attr: { d: paths.step1.unfilled } });
+}
+
+/** Let Next.js paint the new route before uncovering the overlay. */
+function waitForRoutePaint(): Promise<void> {
+  return new Promise((resolve) => {
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => resolve());
+    });
+  });
+}
+
 export function TransitionProvider({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
   const pathRef = useRef<SVGPathElement>(null);
   const isAnimatingRef = useRef(false);
+  const pendingRouteNavRef = useRef(false);
+  const isFirstPathnameEffectRef = useRef(true);
 
   const cover = useCallback(() => {
     const overlayPath = pathRef.current;
@@ -44,7 +92,7 @@ export function TransitionProvider({ children }: { children: React.ReactNode }) 
             ease: "power4.in",
             attr: { d: paths.step1.inBetween.curve1 },
           },
-          0
+          0,
         )
         .to(overlayPath, {
           duration: 0.2,
@@ -80,32 +128,19 @@ export function TransitionProvider({ children }: { children: React.ReactNode }) 
       if (isAnimatingRef.current) return;
       isAnimatingRef.current = true;
 
+      let startedRouteChange = false;
+
       try {
         await cover();
 
         const targetPathname = target.split("#")[0] || "/";
+
         if (targetPathname === pathname) {
           const hashIndex = target.indexOf("#");
           if (hashIndex !== -1) {
-            const hash = target.substring(hashIndex);
-            const el = document.querySelector<HTMLElement>(hash);
-            if (el) {
-              const headerOffset = 88;
-              const lenis = (window as any).lenis;
-              if (lenis) {
-                lenis.scrollTo(el, { offset: -headerOffset, immediate: true });
-              } else {
-                const top = el.getBoundingClientRect().top + window.scrollY - headerOffset;
-                window.scrollTo({ top, left: 0 });
-              }
-            }
+            scrollToHash(target.substring(hashIndex));
           } else {
-            const lenis = (window as any).lenis;
-            if (lenis) {
-              lenis.scrollTo(0, { immediate: true });
-            } else {
-              window.scrollTo({ top: 0, left: 0 });
-            }
+            scrollToTop();
           }
           ScrollTrigger.refresh();
           await uncover();
@@ -113,56 +148,63 @@ export function TransitionProvider({ children }: { children: React.ReactNode }) 
         }
 
         if (target.startsWith("/")) {
+          pendingRouteNavRef.current = true;
+          startedRouteChange = true;
           router.push(target);
           return;
         }
 
-        // Internal hash navigation on current page
         if (target.startsWith("#")) {
-          const el = document.querySelector<HTMLElement>(target);
-          if (el) {
-            const headerOffset = 88;
-            const lenis = (window as any).lenis;
-            if (lenis) {
-              lenis.scrollTo(el, { offset: -headerOffset, immediate: true });
-            } else {
-              const top = el.getBoundingClientRect().top + window.scrollY - headerOffset;
-              window.scrollTo({ top, left: 0 });
-            }
-          }
+          scrollToHash(target);
           ScrollTrigger.refresh();
           await uncover();
         }
       } catch (err) {
         console.error("Transition error", err);
+        pendingRouteNavRef.current = false;
+        await uncover();
       } finally {
-        isAnimatingRef.current = false;
+        if (!startedRouteChange) {
+          isAnimatingRef.current = false;
+        }
       }
     },
-    [cover, uncover, router, pathname]
+    [cover, uncover, router, pathname],
   );
 
-  // Trigger uncover on pathname changes or initial mount
   useEffect(() => {
-    uncover();
+    if (isFirstPathnameEffectRef.current) {
+      isFirstPathnameEffectRef.current = false;
+      resetOverlay(pathRef.current);
 
-    const hash = window.location.hash;
-    if (hash) {
-      setTimeout(() => {
-        const el = document.querySelector<HTMLElement>(hash);
-        if (el) {
-          const headerOffset = 88;
-          const lenis = (window as any).lenis;
-          if (lenis) {
-            lenis.scrollTo(el, { offset: -headerOffset, immediate: true });
-          } else {
-            const top = el.getBoundingClientRect().top + window.scrollY - headerOffset;
-            window.scrollTo({ top, left: 0 });
-          }
-        }
-        ScrollTrigger.refresh();
-      }, 100);
+      const hash = window.location.hash;
+      if (hash) {
+        setTimeout(() => {
+          scrollToHash(hash);
+          ScrollTrigger.refresh();
+        }, 100);
+      }
+      return;
     }
+
+    if (pendingRouteNavRef.current || isAnimatingRef.current) {
+      pendingRouteNavRef.current = false;
+      scrollToTop();
+
+      void (async () => {
+        try {
+          await waitForRoutePaint();
+          await uncover();
+        } finally {
+          isAnimatingRef.current = false;
+          ScrollTrigger.refresh();
+        }
+      })();
+      return;
+    }
+
+    resetOverlay(pathRef.current);
+    ScrollTrigger.refresh();
   }, [pathname, uncover]);
 
   return (

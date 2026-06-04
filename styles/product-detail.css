@@ -1,0 +1,42 @@
+html:has(.product-detail-page) {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+html:has(.product-detail-page)::-webkit-scrollbar {
+  display: none;
+}
+
+.product-detail-page,
+.product-detail-page * {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.product-detail-page *::-webkit-scrollbar {
+  display: none;
+}
+
+/* Dialog portals to body — scope brand tokens on the modal itself */
+.nirvana-enquiry-dialog {
+  --nirvana-mist: #eef6f1;
+  --nirvana-cream: #f8fbf9;
+  --nirvana-sage: #b5d4c3;
+  --nirvana-mint: #d8ebe1;
+  --nirvana-leaf: #8fbfa3;
+  --nirvana-forest: #2a4538;
+  --nirvana-deep: #162820;
+  --nirvana-gold: #c4a574;
+}
+
+.nirvana-enquiry-dialog__submit {
+  background-color: #2a4538;
+  border-color: #2a4538;
+  color: #f8fbf9;
+}
+
+.nirvana-enquiry-dialog__submit:hover:not(:disabled),
+.nirvana-enquiry-dialog__submit:active:not(:disabled) {
+  background-color: #162820;
+  border-color: #162820;
+}

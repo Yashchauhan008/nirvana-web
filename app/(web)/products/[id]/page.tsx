@@ -1,12 +1,12 @@
 import Image from "next/image";
-import Link from "next/link";
+import { TransitionLink } from "@/components/shared/transition-link";
 import { ArrowLeft, Check, Plus } from "lucide-react";
 import { homeImages } from "@/config/home-images";
 import { getProduct } from "@/services/api/product.api";
 import { ProductImageGallery } from "@/components/pages/products/product-image-gallery";
-import { AddToCartButton } from "@/components/pages/products/add-to-cart-button";
 import { EnquireNowButton } from "@/components/pages/products/enquire-now-button";
 import { resolvePublicFileUrl } from "@/utils/resolvePublicFileUrl";
+import "@/styles/product-detail.css";
 
 export const dynamic = "force-dynamic";
 
@@ -14,9 +14,11 @@ type ProductDetailPageProps = {
   params: Promise<{ id: string }>;
 };
 
-export default async function ProductDetailPage({ params }: ProductDetailPageProps) {
+export default async function ProductDetailPage({
+  params,
+}: ProductDetailPageProps) {
   const { id } = await params;
-  
+
   let product: any = null;
   let displayPrice = "$425 USD";
   let tag = "Eyewear";
@@ -36,7 +38,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
     description =
       product.description ||
       `Crafted from high-density Japanese acetate, the ${product.name} features a timeless silhouette elevated by architectural chamfering. Equipped with custom hardware and high quality lenses for ultimate clarity.`;
-    
+
     displayPrice = new Intl.NumberFormat("en-IN", {
       style: "currency",
       currency: "INR",
@@ -63,8 +65,9 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
   } else {
     // Fall back to mock data
     const mockProduct =
-      homeImages.collection.find((p) => p.name.toLowerCase() === id.toLowerCase()) ||
-      homeImages.collection[0];
+      homeImages.collection.find(
+        (p) => p.name.toLowerCase() === id.toLowerCase(),
+      ) || homeImages.collection[0];
     product = mockProduct;
     imageUrls.push(mockProduct.image);
     tag = mockProduct.tag;
@@ -80,21 +83,22 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
   }
 
   return (
-    <main className="min-h-screen bg-[var(--nirvana-cream)] flex flex-col lg:flex-row">
-        {/* Left Column - Product Imagery (Sticky) */}
-        <section className="relative w-full lg:w-1/2 lg:h-screen lg:sticky top-0 bg-[var(--nirvana-sage)]/10 flex flex-col">
-          <div className="p-8 pb-0 pt-28 lg:pt-32">
-            <Link href="/products" className="inline-flex items-center gap-2 text-[var(--nirvana-deep)] hover:text-[var(--nirvana-leaf)] transition-colors">
-              <ArrowLeft className="w-5 h-5" />
-              <span className="font-body-strong uppercase tracking-widest text-xs">Back</span>
-            </Link>
-          </div>
-          <div className="flex-1 p-8 lg:p-16 flex items-center justify-center">
-            <div className="w-full max-w-[500px]">
-              <ProductImageGallery images={imageUrls} productName={name} />
-            </div>
-          </div>
-        </section>
+    <main className="product-detail-page min-h-screen bg-[var(--nirvana-cream)] flex flex-col lg:flex-row">
+      {/* Left Column - Product Imagery (Sticky) */}
+      <section className="scrollbar-hide relative flex w-full flex-col px-6 pb-8 pt-24 lg:sticky lg:top-0 lg:h-screen lg:w-1/2 lg:overflow-y-auto lg:overscroll-contain lg:px-10 lg:pb-10 lg:pt-28 xl:px-12 bg-[var(--nirvana-sage)]/10">
+        <TransitionLink
+          href="/products"
+          className="inline-flex shrink-0 items-center gap-2 text-[var(--nirvana-deep)] hover:text-[var(--nirvana-leaf)] transition-colors"
+        >
+          <ArrowLeft className="w-5 h-5" />
+          <span className="font-body-strong uppercase tracking-widest text-xs">
+            Back
+          </span>
+        </TransitionLink>
+        <div className="mx-auto mt-6 flex w-full min-h-0 max-w-[min(720px,100%)] flex-1 flex-col lg:mt-10 lg:max-w-[min(780px,100%)] xl:mt-12">
+          <ProductImageGallery images={imageUrls} productName={name} />
+        </div>
+      </section>
 
       {/* Right Column - Product Details */}
       <section className="w-full lg:w-1/2 px-6 py-12 lg:px-16 lg:py-32 flex flex-col">
@@ -145,27 +149,22 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
           )}
 
           {/* Actions */}
-          <div className="flex flex-col gap-4 mb-16">
-            <div className="flex flex-col sm:flex-row gap-4">
-              <AddToCartButton
-                productId={dbProduct ? product.id : id}
-                productName={name}
-                className="flex-1 bg-[var(--nirvana-forest)] text-[var(--nirvana-cream)] py-5 px-8 rounded-full font-body-strong uppercase tracking-widest text-sm hover:bg-[var(--nirvana-deep)] transition-colors text-center shadow-[0_20px_40px_rgba(42,69,56,0.2)] flex items-center justify-center gap-2"
-              />
-              <EnquireNowButton
-                productId={dbProduct ? product.id : id}
-                productName={name}
-                hasPendingInquiry={product.has_pending_inquiry}
-                className="flex-1 bg-transparent border border-[var(--nirvana-forest)]/30 text-[var(--nirvana-forest)] py-5 px-8 rounded-full font-body-strong uppercase tracking-widest text-sm hover:bg-[var(--nirvana-forest)] hover:text-[var(--nirvana-cream)] transition-colors text-center flex items-center justify-center gap-2"
-              />
-            </div>
+          <div className="mb-16">
+            <EnquireNowButton
+              productId={dbProduct ? product.id : id}
+              productName={name}
+              className="w-full bg-[var(--nirvana-forest)] text-[var(--nirvana-cream)] py-5 px-8 rounded-full font-body-strong uppercase tracking-widest text-sm hover:bg-[var(--nirvana-deep)] transition-colors text-center shadow-[0_20px_40px_rgba(42,69,56,0.2)] flex items-center justify-center gap-2"
+            />
           </div>
 
           {/* Accordion Details */}
           {technicalDetails.length > 0 && (
             <div className="border-t border-[var(--nirvana-forest)]/10">
               {/* Specifications Accordion */}
-              <details className="border-b border-[var(--nirvana-forest)]/10 py-6 group" open>
+              <details
+                className="border-b border-[var(--nirvana-forest)]/10 py-6 group"
+                open
+              >
                 <summary className="w-full flex justify-between items-center list-none cursor-pointer focus:outline-none select-none">
                   <h4 className="font-body-strong uppercase tracking-widest text-sm text-[var(--nirvana-deep)]">
                     Specifications
@@ -191,6 +190,6 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
           )}
         </div>
       </section>
-      </main>
+    </main>
   );
 }

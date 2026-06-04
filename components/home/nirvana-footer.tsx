@@ -10,10 +10,9 @@ const FOOTER_NAV = [
   { href: "/#main-hero", label: "Home" },
   { href: "/#cinematic-hero", label: "Experience" },
   { href: "/#philosophy", label: "Philosophy" },
-  { href: "/#collection", label: "Collection" },
-  { href: "/products", label: "Shop" },
-  { href: "/about", label: "About" },
+  { href: "/products", label: "Collection" },
   { href: "/contact", label: "Contact" },
+  { href: "/about", label: "About" },
 ];
 
 const FOOTER_SOCIAL = [

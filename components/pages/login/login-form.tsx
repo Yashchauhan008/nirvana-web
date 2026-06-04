@@ -62,13 +62,7 @@ export default function LoginForm() {
       let nextUrl = redirectUrl && redirectUrl.startsWith("/")
         ? redirectUrl
         : "/";
-      
-      // If redirecting to a product page after auth, add flag to auto-open enquiry
-      if (redirectUrl && redirectUrl.startsWith("/products/")) {
-        const separator = nextUrl.includes("?") ? "&" : "?";
-        nextUrl = `${nextUrl}${separator}open_enquiry=true`;
-      }
-      
+
       login(data.customer, data.token, data.expires_at);
       await queryClient.invalidateQueries({ queryKey: cartKeys.all });
       toast.success("Signed in successfully.");

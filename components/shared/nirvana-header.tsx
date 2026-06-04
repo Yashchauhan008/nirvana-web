@@ -1,8 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ShoppingCart } from "lucide-react";
-import { useGetCart } from "@/hooks/useCart";
 import { cn } from "@/lib/utils";
 import { useTransitionContext } from "@/contexts/TransitionContext";
 import { usePathname } from "next/navigation";
@@ -11,18 +9,14 @@ const NAV = [
   { href: "/", label: "Home", isHash: false },
   { href: "/#cinematic-hero", label: "Experience", isHash: true, id: "#cinematic-hero" },
   { href: "/#philosophy", label: "Philosophy", isHash: true, id: "#philosophy" },
-  { href: "/#collection", label: "Collection", isHash: true, id: "#collection" },
-  { href: "/products", label: "Shop", isHash: false },
+  { href: "/products", label: "Collection", isHash: false },
+  { href: "/contact", label: "Contact", isHash: false },
 ];
 
 export function NirvanaHeader() {
-  const { data: cart } = useGetCart();
   const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname();
   const { navigateWithTransition } = useTransitionContext();
-
-  const cartItemCount =
-    cart?.items?.reduce((total, item) => total + (item.quantity || 0), 0) ?? 0;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -91,23 +85,6 @@ export function NirvanaHeader() {
           >
             Explore
           </button>
-
-          <a
-            href="/cart"
-            onClick={(e) => {
-              e.preventDefault();
-              void navigateWithTransition("/cart");
-            }}
-            className="relative p-2 text-[var(--nirvana-forest)] transition-transform duration-300 hover:scale-105 flex items-center"
-            aria-label="Shopping bag"
-          >
-            <ShoppingCart className="w-5 h-5" />
-            {cartItemCount > 0 && (
-              <span className="absolute top-0 right-0 flex h-4 w-4 items-center justify-center rounded-full bg-[var(--nirvana-leaf)] text-[9px] font-bold text-[var(--nirvana-cream)] animate-fade-in">
-                {cartItemCount}
-              </span>
-            )}
-          </a>
         </div>
       </div>
     </header>
