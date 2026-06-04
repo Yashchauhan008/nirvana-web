@@ -7,9 +7,8 @@ import { visualGalleryItems } from "@/config/visual-gallery-items";
 import { VisualGallery } from "@/lib/visual-gallery/canvas";
 
 const FOOTER_LINKS = [
-  { href: "/products", label: "Shop" },
-  { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
+  { href: "/about", label: "About" },
   { href: "/account", label: "Account" },
 ];
 

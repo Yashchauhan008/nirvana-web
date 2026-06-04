@@ -4,7 +4,7 @@ import React, { useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Menu, User, X, ShoppingCart, LogOut } from "lucide-react";
+import { Menu, User, X, LogOut } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import {
@@ -25,7 +25,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { useGetCart } from "@/hooks/useCart";
 import { useAuth } from "@/contexts/AuthContext";
 import {
   NavigationMenu,
@@ -47,9 +46,6 @@ export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
-  const { data: cart } = useGetCart();
-  const cartItemCount =
-    cart?.items?.reduce((total, item) => total + (item.quantity || 0), 0) ?? 0;
   const { authUser, isLoggedIn, logout } = useAuth();
 
   const userInitials = useMemo(() => {
@@ -153,27 +149,8 @@ export default function Header() {
           </Link>
         </nav>
 
-        {/* Right: Auth + Cart + primary CTA */}
+        {/* Right: Auth + primary CTA */}
         <div className="flex items-center gap-3 md:gap-6">
-          {/* Cart */}
-          <Link
-            href="/cart"
-            aria-label={`Shopping cart${
-              cartItemCount > 0 ? `, ${cartItemCount} items` : ""
-            }`}
-            className="relative hover:text-primary"
-          >
-            <ShoppingCart className="size-6" />
-            {cartItemCount > 0 && (
-              <span
-                className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-[#0046B7] text-[10px] font-semibold text-white"
-                aria-hidden
-              >
-                {cartItemCount > 99 ? "99+" : cartItemCount}
-              </span>
-            )}
-          </Link>
-
           {/* Account / Auth */}
           {isLoggedIn && authUser ? (
             <DropdownMenu>
@@ -297,18 +274,6 @@ export default function Header() {
                 })}
               </nav>
               <div className="mt-auto flex flex-col gap-2 p-3 border-t border-border">
-                <SheetClose asChild>
-                  <Link
-                    href="/cart"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center gap-3 px-4 py-3 rounded-lg text-foreground hover:bg-muted transition-colors"
-                  >
-                    <ShoppingCart className="size-5 text-muted-foreground" />
-                    <span className="font-medium">
-                      Cart{cartItemCount > 0 ? ` (${cartItemCount})` : ""}
-                    </span>
-                  </Link>
-                </SheetClose>
                 {isLoggedIn && authUser ? (
                   <>
                     <div className="flex items-center gap-3 rounded-lg bg-muted px-4 py-3">

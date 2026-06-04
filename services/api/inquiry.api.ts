@@ -3,6 +3,9 @@ import httpCall from "../httpCall";
 export interface SubmitProductInquiryPayload {
   product_id: string;
   message: string;
+  name: string;
+  email: string;
+  phone_number: string;
   quantity?: number;
 }
 
@@ -50,6 +53,7 @@ export interface SubmitGuestProductInquiryPayload {
   product_id: string;
   message: string;
   name: string;
+  email: string;
   phone_number: string;
   quantity?: number;
 }

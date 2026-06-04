@@ -1,37 +1,102 @@
 import Image from "next/image";
-import Link from "next/link";
+import { TransitionLink } from "@/components/shared/transition-link";
 import { ArrowLeft, Check, Plus } from "lucide-react";
 import { homeImages } from "@/config/home-images";
+import { getProduct } from "@/services/api/product.api";
+import { ProductImageGallery } from "@/components/pages/products/product-image-gallery";
+import { EnquireNowButton } from "@/components/pages/products/enquire-now-button";
+import { resolvePublicFileUrl } from "@/utils/resolvePublicFileUrl";
+import "@/styles/product-detail.css";
+
+export const dynamic = "force-dynamic";
 
 type ProductDetailPageProps = {
   params: Promise<{ id: string }>;
 };
 
-export default async function ProductDetailPage({ params }: ProductDetailPageProps) {
+export default async function ProductDetailPage({
+  params,
+}: ProductDetailPageProps) {
   const { id } = await params;
-  
-  // Find product by id (case insensitive match) or fallback to first product
-  const product = homeImages.collection.find(p => p.name.toLowerCase() === id.toLowerCase()) || homeImages.collection[0];
+
+  let product: any = null;
+  let displayPrice = "$425 USD";
+  let tag = "Eyewear";
+  let name = "";
+  let description = "";
+  const imageUrls: string[] = [];
+  let points: string[] = [];
+  let technicalDetails: any[] = [];
+
+  // Attempt to fetch product from backend API
+  const dbProduct = await getProduct(id);
+
+  if (dbProduct) {
+    product = dbProduct;
+    tag = product.category?.name || product.product_label || "Eyewear";
+    name = product.name;
+    description =
+      product.description ||
+      `Crafted from high-density Japanese acetate, the ${product.name} features a timeless silhouette elevated by architectural chamfering. Equipped with custom hardware and high quality lenses for ultimate clarity.`;
+
+    displayPrice = new Intl.NumberFormat("en-IN", {
+      style: "currency",
+      currency: "INR",
+      maximumFractionDigits: 0,
+    }).format(product.sale_price_in_rupee);
+
+    points = product.points || [];
+    technicalDetails = product.technical_details || [];
+
+    // Construct image URLs list
+    if (product.primary_image?.url) {
+      imageUrls.push(resolvePublicFileUrl(product.primary_image.url));
+    }
+    if (product.images && product.images.length > 0) {
+      product.images.forEach((img: any) => {
+        if (img.image?.url && img.image.url !== product.primary_image?.url) {
+          imageUrls.push(resolvePublicFileUrl(img.image.url));
+        }
+      });
+    }
+    if (imageUrls.length === 0) {
+      imageUrls.push("/images/models/model3.png");
+    }
+  } else {
+    // Fall back to mock data
+    const mockProduct =
+      homeImages.collection.find(
+        (p) => p.name.toLowerCase() === id.toLowerCase(),
+      ) || homeImages.collection[0];
+    product = mockProduct;
+    imageUrls.push(mockProduct.image);
+    tag = mockProduct.tag;
+    name = mockProduct.name;
+    description = `Crafted from high-density Japanese acetate, the ${mockProduct.name} features a timeless silhouette elevated by architectural chamfering. Equipped with 18k gold-plated hinges and CR-39 lenses for ultimate clarity.`;
+    displayPrice = "$425 USD";
+    // Mock technical details for mock products so page isn't totally empty
+    technicalDetails = [
+      { label: "Material", value: "Japanese Acetate" },
+      { label: "Hinges", value: "5-barrel custom titanium hinges" },
+      { label: "Lenses", value: "CR-39 polarized UV400" },
+    ];
+  }
 
   return (
-    <main className="min-h-screen bg-[var(--nirvana-cream)] flex flex-col lg:flex-row">
+    <main className="product-detail-page min-h-screen bg-[var(--nirvana-cream)] flex flex-col lg:flex-row">
       {/* Left Column - Product Imagery (Sticky) */}
-      <section className="relative w-full lg:w-1/2 lg:h-screen lg:sticky top-0 bg-[var(--nirvana-sage)]/10">
-        <Link href="/products" className="absolute top-8 left-8 z-20 flex items-center gap-2 text-[var(--nirvana-deep)] hover:text-[var(--nirvana-leaf)] transition-colors">
+      <section className="scrollbar-hide relative flex w-full flex-col px-6 pb-8 pt-24 lg:sticky lg:top-0 lg:h-screen lg:w-1/2 lg:overflow-y-auto lg:overscroll-contain lg:px-10 lg:pb-10 lg:pt-28 xl:px-12 bg-[var(--nirvana-sage)]/10">
+        <TransitionLink
+          href="/products"
+          className="inline-flex shrink-0 items-center gap-2 text-[var(--nirvana-deep)] hover:text-[var(--nirvana-leaf)] transition-colors"
+        >
           <ArrowLeft className="w-5 h-5" />
-          <span className="font-body-strong uppercase tracking-widest text-xs">Back</span>
-        </Link>
-        <div className="absolute inset-0 p-8 lg:p-16 flex items-center justify-center">
-          <div className="relative w-full h-full max-h-[80vh] rounded-[2.5rem] overflow-hidden bg-white/40 border border-white/60 shadow-[0_30px_60px_rgba(42,69,56,0.1)]">
-            <Image
-              src={product.image}
-              alt={product.name}
-              fill
-              className="object-cover"
-              sizes="(max-width: 1024px) 100vw, 50vw"
-              priority
-            />
-          </div>
+          <span className="font-body-strong uppercase tracking-widest text-xs">
+            Back
+          </span>
+        </TransitionLink>
+        <div className="mx-auto mt-6 flex w-full min-h-0 max-w-[min(720px,100%)] flex-1 flex-col lg:mt-10 lg:max-w-[min(780px,100%)] xl:mt-12">
+          <ProductImageGallery images={imageUrls} productName={name} />
         </div>
       </section>
 
@@ -41,69 +106,88 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
           {/* Breadcrumb & Tags */}
           <div className="flex items-center gap-4 mb-6">
             <span className="font-body-strong text-xs uppercase tracking-widest text-[var(--nirvana-leaf)]">
-              {product.tag}
+              {tag}
             </span>
-            <span className="w-1 h-1 rounded-full bg-[var(--nirvana-sage)]" />
-            <span className="font-body-strong text-xs uppercase tracking-widest text-[var(--nirvana-sage)]">
-              Signature Series
-            </span>
+            {product.product_label && (
+              <>
+                <span className="w-1 h-1 rounded-full bg-[var(--nirvana-sage)]" />
+                <span className="font-body-strong text-[10px] uppercase tracking-widest text-[var(--nirvana-deep)] bg-white/75 px-3 py-0.5 rounded-full border border-white/60 backdrop-blur-md">
+                  {product.product_label}
+                </span>
+              </>
+            )}
           </div>
 
           {/* Title & Price */}
-          <h1 className="font-display text-5xl lg:text-7xl text-[var(--nirvana-deep)] mb-4">
-            {product.name}
+          <h1 className="font-display text-5xl lg:text-7xl text-[var(--nirvana-deep)] mb-4 capitalize">
+            {name}
           </h1>
           <p className="font-display text-2xl text-[var(--nirvana-forest)] mb-8">
-            $425 USD
+            {displayPrice}
           </p>
 
           {/* Description */}
           <p className="font-body text-lg text-[var(--nirvana-deep)]/80 leading-relaxed mb-12">
-            Crafted from high-density Japanese acetate, the {product.name} features a timeless silhouette elevated by architectural chamfering. Equipped with 18k gold-plated hinges and CR-39 lenses for ultimate clarity.
+            {description}
           </p>
 
-          {/* Color Selection */}
-          <div className="mb-12">
-            <h3 className="font-body-strong text-sm uppercase tracking-widest text-[var(--nirvana-deep)] mb-4">
-              Color: <span className="text-[var(--nirvana-leaf)]">Vintage Tortoise</span>
-            </h3>
-            <div className="flex gap-4">
-              <button className="w-12 h-12 rounded-full bg-[#3e2723] border-2 border-[var(--nirvana-forest)] ring-2 ring-transparent transition-all flex items-center justify-center shadow-lg">
-                <Check className="w-4 h-4 text-[var(--nirvana-cream)]" />
-              </button>
-              <button className="w-12 h-12 rounded-full bg-[#1a1a1a] border-2 border-transparent hover:border-black/20 transition-all opacity-70 hover:opacity-100" />
-              <button className="w-12 h-12 rounded-full bg-[var(--nirvana-sage)] border-2 border-transparent hover:border-[var(--nirvana-sage)]/50 transition-all opacity-70 hover:opacity-100" />
+          {/* Highlights */}
+          {points.length > 0 && (
+            <div className="mb-12">
+              <h3 className="font-body-strong text-sm uppercase tracking-widest text-[var(--nirvana-deep)] mb-4">
+                Highlights
+              </h3>
+              <ul className="space-y-3 font-body text-base text-[var(--nirvana-deep)]/80">
+                {points.map((point, index) => (
+                  <li key={index} className="flex items-start gap-3">
+                    <span className="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--nirvana-leaf)]" />
+                    <span className="capitalize">{point}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
-          </div>
+          )}
 
           {/* Actions */}
-          <div className="flex flex-col sm:flex-row gap-4 mb-16">
-            <button className="flex-1 bg-[var(--nirvana-forest)] text-[var(--nirvana-cream)] py-5 px-8 rounded-full font-body-strong uppercase tracking-widest text-sm hover:bg-[var(--nirvana-deep)] transition-colors text-center shadow-[0_20px_40px_rgba(42,69,56,0.2)]">
-              Add to Bag
-            </button>
-            <button className="sm:w-auto bg-transparent border border-[var(--nirvana-forest)]/30 text-[var(--nirvana-forest)] py-5 px-8 rounded-full font-body-strong uppercase tracking-widest text-sm hover:bg-[var(--nirvana-forest)] hover:text-[var(--nirvana-cream)] transition-colors text-center">
-              Try On 3D
-            </button>
+          <div className="mb-16">
+            <EnquireNowButton
+              productId={dbProduct ? product.id : id}
+              productName={name}
+              className="w-full bg-[var(--nirvana-forest)] text-[var(--nirvana-cream)] py-5 px-8 rounded-full font-body-strong uppercase tracking-widest text-sm hover:bg-[var(--nirvana-deep)] transition-colors text-center shadow-[0_20px_40px_rgba(42,69,56,0.2)] flex items-center justify-center gap-2"
+            />
           </div>
 
           {/* Accordion Details */}
-          <div className="border-t border-[var(--nirvana-forest)]/10">
-            {[
-              { title: "Specifications", content: "Hand-polished Japanese Acetate. 5-barrel custom titanium hinges. Custom wire core with filigree engraving." },
-              { title: "Lenses", content: "CR-39 polarized lenses with anti-reflective and hydrophobic coating. 100% UVA/UVB protection." },
-              { title: "Fit & Dimensions", content: "Eye: 48mm / Bridge: 22mm / Temple: 145mm. Designed for a medium fit." },
-              { title: "Shipping & Returns", content: "Complimentary express shipping on all orders. 30-day returns." }
-            ].map((item, i) => (
-              <div key={i} className="border-b border-[var(--nirvana-forest)]/10 py-6">
-                <button className="w-full flex justify-between items-center group">
+          {technicalDetails.length > 0 && (
+            <div className="border-t border-[var(--nirvana-forest)]/10">
+              {/* Specifications Accordion */}
+              <details
+                className="border-b border-[var(--nirvana-forest)]/10 py-6 group"
+                open
+              >
+                <summary className="w-full flex justify-between items-center list-none cursor-pointer focus:outline-none select-none">
                   <h4 className="font-body-strong uppercase tracking-widest text-sm text-[var(--nirvana-deep)]">
-                    {item.title}
+                    Specifications
                   </h4>
-                  <Plus className="w-4 h-4 text-[var(--nirvana-sage)] group-hover:text-[var(--nirvana-forest)] transition-colors" />
-                </button>
-              </div>
-            ))}
-          </div>
+                  <Plus className="w-4 h-4 text-[var(--nirvana-sage)] group-open:rotate-45 transition-transform duration-300" />
+                </summary>
+                <div className="mt-4 text-sm text-[var(--nirvana-deep)]/70 font-body leading-relaxed">
+                  <div className="grid grid-cols-2 gap-y-3 gap-x-6 max-w-md bg-white/20 p-4 rounded-2xl border border-white/40">
+                    {technicalDetails.map((detail: any, idx: number) => (
+                      <div key={idx} className="contents">
+                        <span className="font-body-strong text-xs uppercase tracking-wider text-[var(--nirvana-sage)]">
+                          {detail.label}
+                        </span>
+                        <span className="font-body text-sm text-[var(--nirvana-deep)] capitalize">
+                          {detail.value}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </details>
+            </div>
+          )}
         </div>
       </section>
     </main>

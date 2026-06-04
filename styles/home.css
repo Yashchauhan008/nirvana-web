@@ -124,9 +124,7 @@
   z-index: 1;
   mix-blend-mode: screen;
   filter:
-    drop-shadow(0 32px 48px color-mix(in srgb, var(--nirvana-forest) 22%, transparent))
-    drop-shadow(0 16px 28px color-mix(in srgb, var(--nirvana-forest) 16%, transparent))
-    drop-shadow(0 6px 14px color-mix(in srgb, var(--nirvana-deep) 12%, transparent));
+    drop-shadow(0 32px 48px color-mix(in srgb, var(--nirvana-forest) 22%, transparent)) drop-shadow(0 16px 28px color-mix(in srgb, var(--nirvana-forest) 16%, transparent)) drop-shadow(0 6px 14px color-mix(in srgb, var(--nirvana-deep) 12%, transparent));
 }
 
 .nirvana-home .image-cover {

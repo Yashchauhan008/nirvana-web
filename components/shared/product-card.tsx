@@ -1,18 +1,19 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { Product } from "@/services/api/product.api";
+import { resolvePublicFileUrl } from "@/utils/resolvePublicFileUrl";
 
 interface ProductCardProps {
   product: Product;
 }
 
 function getPrimaryImageUrl(product: Product): string | null {
-  return (
+  const url =
     product.primary_image?.url ??
     product.images?.find((i) => i.is_primary)?.image?.url ??
     product.images?.[0]?.image?.url ??
-    null
-  );
+    null;
+  return url ? resolvePublicFileUrl(url) : null;
 }
 
 function formatPrice(rupee: number): string {

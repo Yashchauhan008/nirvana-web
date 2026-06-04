@@ -3,6 +3,7 @@
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
+import { TransitionLink } from "@/components/shared/transition-link";
 import { useRef } from "react";
 import type Lenis from "lenis";
 
@@ -14,12 +15,12 @@ const CinematicCylinderHero = dynamic(
   { ssr: false },
 );
 import { LuxuryHero } from "@/components/home/luxury-hero";
-import { SvgPathOverlay } from "@/components/home/svg-path-overlay";
 import { useHomeAnimations } from "@/components/home/use-home-animations";
 import { NirvanaFooter } from "@/components/home/nirvana-footer";
 import { homeImages } from "@/config/home-images";
-import { useSvgPathTransition } from "@/hooks/use-svg-path-transition";
 import { zaslia } from "@/lib/fonts/zaslia";
+import type { Product } from "@/services/api/product.api";
+import { resolvePublicFileUrl } from "@/utils/resolvePublicFileUrl";
 import "@/styles/home.css";
 
 const MARQUEE = [
@@ -35,66 +36,17 @@ const NAV = [
   { href: "#main-hero", label: "Home" },
   { href: "#cinematic-hero", label: "Experience" },
   { href: "#philosophy", label: "Philosophy" },
-  { href: "#collection", label: "Collection" },
-  { href: "/products", label: "Shop" },
+  { href: "/products", label: "Collection" },
+  { href: "/contact", label: "Contact" },
 ];
 
-export function NirvanaHome() {
+export function NirvanaHome({ products = [] }: { products?: Product[] }) {
   const rootRef = useRef<HTMLDivElement>(null);
   const lenisRef = useRef<Lenis | null>(null);
   useHomeAnimations(rootRef, lenisRef);
-  const { pathRef, navigateWithTransition, navigateToTop } =
-    useSvgPathTransition(lenisRef);
-
-  const handleNavClick = (href: string) => (e: React.MouseEvent) => {
-    e.preventDefault();
-    void navigateWithTransition(href);
-  };
 
   return (
-    <div
-      ref={rootRef}
-      className={`nirvana-home grain ${zaslia.variable} relative overflow-x-hidden`}
-    >
-      <SvgPathOverlay pathRef={pathRef} />
-
-      <header
-        data-site-header
-        className="glass-nav fixed inset-x-0 top-0 z-40 transition-shadow"
-      >
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 md:px-10">
-          <button
-            type="button"
-            onClick={(e) => {
-              e.preventDefault();
-              void navigateToTop();
-            }}
-            className="font-display text-xl tracking-[0.35em] text-[var(--nirvana-deep)] md:text-2xl"
-          >
-            NIRVANA
-          </button>
-          <nav className="hidden items-center gap-10 md:flex">
-            {NAV.map(({ href, label }) => (
-              <button
-                key={href}
-                type="button"
-                onClick={handleNavClick(href)}
-                className="font-body-strong cursor-pointer bg-transparent text-[11px] uppercase tracking-[0.22em] text-[var(--nirvana-forest)] transition-opacity hover:opacity-60"
-              >
-                {label}
-              </button>
-            ))}
-          </nav>
-          <button
-            type="button"
-            onClick={handleNavClick("/products")}
-            className="font-body-strong cursor-pointer rounded-full border border-[var(--nirvana-sage)] bg-transparent px-5 py-2 text-[11px] uppercase tracking-[0.2em] text-[var(--nirvana-forest)] transition-colors hover:bg-[var(--nirvana-mint)]"
-          >
-            Explore
-          </button>
-        </div>
-      </header>
-
+    <div ref={rootRef} className="relative overflow-x-hidden">
       <LuxuryHero />
 
       <CinematicCylinderHero />
@@ -257,38 +209,90 @@ export function NirvanaHome() {
                 Curated frames
               </h2>
             </div>
-            <Link
+            <TransitionLink
               href="/products"
               className="font-body-strong text-sm uppercase tracking-[0.2em] text-[var(--nirvana-forest)] underline-offset-4 hover:underline"
             >
               View all pieces →
-            </Link>
+            </TransitionLink>
           </div>
 
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {homeImages.collection.map((item) => (
-              <article
-                key={item.name}
-                data-collection-card
-                className="frame-card group overflow-hidden rounded-3xl bg-white/40"
-              >
-                <div className="relative aspect-[3/4] overflow-hidden">
-                  <Image
-                    src={item.image}
-                    alt={item.name}
-                    fill
-                    className="image-cover transition-transform duration-700 group-hover:scale-105"
-                    sizes="(max-width: 768px) 50vw, 33vw"
-                  />
-                </div>
-                <div className="p-5">
-                  <p className="font-body-strong text-[10px] uppercase tracking-[0.25em] text-[var(--nirvana-leaf)]">
-                    {item.tag}
-                  </p>
-                  <h3 className="font-display mt-1 text-2xl">{item.name}</h3>
-                </div>
-              </article>
-            ))}
+            {products && products.length > 0
+              ? products.map((product) => {
+                  const imageUrl =
+                    resolvePublicFileUrl(
+                      product.primary_image?.url ??
+                        product.images?.find((i) => i.is_primary)?.image?.url ??
+                        product.images?.[0]?.image?.url,
+                    ) || "/images/models/model3.png";
+
+                  const displayPrice = new Intl.NumberFormat("en-IN", {
+                    style: "currency",
+                    currency: "INR",
+                    maximumFractionDigits: 0,
+                  }).format(product.sale_price_in_rupee);
+
+                  return (
+                    <TransitionLink
+                      key={product.id}
+                      href={`/products/${product.id}`}
+                      data-collection-card
+                      className="frame-card group block overflow-hidden rounded-3xl bg-white/40"
+                    >
+                      <div className="relative aspect-[3/4] overflow-hidden">
+                        <Image
+                          src={imageUrl}
+                          alt={product.name}
+                          fill
+                          className="image-cover transition-transform duration-700 group-hover:scale-105"
+                          sizes="(max-width: 768px) 50vw, 33vw"
+                          unoptimized={imageUrl.startsWith("http://")}
+                        />
+                      </div>
+                      <div className="p-5">
+                        <p className="font-body-strong text-[10px] uppercase tracking-[0.25em] text-[var(--nirvana-leaf)]">
+                          {product.category?.name ||
+                            product.product_label ||
+                            "Eyewear"}
+                        </p>
+                        <div className="mt-1 flex items-baseline justify-between gap-2">
+                          <h3 className="font-display text-2xl">
+                            {product.name}
+                          </h3>
+                          <span className="font-body-strong text-sm text-[var(--nirvana-forest)]">
+                            {displayPrice}
+                          </span>
+                        </div>
+                      </div>
+                    </TransitionLink>
+                  );
+                })
+              : homeImages.collection.map((item) => (
+                  <article
+                    key={item.name}
+                    data-collection-card
+                    className="frame-card group overflow-hidden rounded-3xl bg-white/40"
+                  >
+                    <div className="relative aspect-[3/4] overflow-hidden">
+                      <Image
+                        src={item.image}
+                        alt={item.name}
+                        fill
+                        className="image-cover transition-transform duration-700 group-hover:scale-105"
+                        sizes="(max-width: 768px) 50vw, 33vw"
+                      />
+                    </div>
+                    <div className="p-5">
+                      <p className="font-body-strong text-[10px] uppercase tracking-[0.25em] text-[var(--nirvana-leaf)]">
+                        {item.tag}
+                      </p>
+                      <h3 className="font-display mt-1 text-2xl">
+                        {item.name}
+                      </h3>
+                    </div>
+                  </article>
+                ))}
           </div>
         </div>
       </section>
@@ -378,12 +382,12 @@ export function NirvanaHome() {
               includes a bespoke adjustment session.
             </p>
             <div className="mt-10 flex flex-wrap justify-center gap-4">
-              <Link
+              <TransitionLink
                 href="/products"
                 className="font-body-strong rounded-full bg-[var(--nirvana-cream)] px-8 py-3.5 text-sm tracking-[0.12em] text-[var(--nirvana-deep)]"
               >
                 Shop eyewear
-              </Link>
+              </TransitionLink>
               <Link
                 href="/contact"
                 className="font-body-strong rounded-full border border-[var(--nirvana-mint)]/50 px-8 py-3.5 text-sm uppercase tracking-[0.18em] text-[var(--nirvana-cream)]"

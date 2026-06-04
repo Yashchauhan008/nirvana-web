@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Menu, User, X, ShoppingCart, LogOut } from "lucide-react";
+import { Menu, User, X, LogOut } from "lucide-react";
 import { useMemo, useState } from "react";
 
 import { cn } from "@/lib/utils";
@@ -17,7 +17,6 @@ import {
 } from "@/components/ui/sheet";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { useGetCart } from "@/hooks/useCart";
 import { useAuth } from "@/contexts/AuthContext";
 
 const NAV_ITEMS = [
@@ -31,9 +30,6 @@ export function HeaderMobileMenu() {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
-  const { data: cart } = useGetCart();
-  const cartItemCount =
-    cart?.items?.reduce((total, item) => total + (item.quantity || 0), 0) ?? 0;
   const { authUser, isLoggedIn, logout } = useAuth();
 
   const userInitials = useMemo(() => {
@@ -142,16 +138,6 @@ export function HeaderMobileMenu() {
         </nav>
         <div className="border-t border-slate-200/80 bg-white/60 px-6 py-5">
           <div className="mx-auto flex max-w-xs flex-col gap-3">
-            <SheetClose asChild>
-              <Link
-                href="/cart"
-                onClick={() => setOpen(false)}
-                className="flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3.5 text-sm font-semibold text-slate-700 shadow-sm transition-colors hover:border-[#0046B7] hover:bg-[#0046B7]/5 hover:text-[#0046B7]"
-              >
-                <ShoppingCart className="size-5" />
-                Cart{cartItemCount > 0 ? ` (${cartItemCount})` : ""}
-              </Link>
-            </SheetClose>
             {isLoggedIn && authUser ? (
               <>
                 <div className="flex items-center gap-3 rounded-xl bg-slate-50 px-4 py-3">

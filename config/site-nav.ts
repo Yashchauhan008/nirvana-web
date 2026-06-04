@@ -3,7 +3,6 @@ export const siteNav = [
   { href: "/about", label: "About" },
   { href: "/products", label: "Products" },
   { href: "/contact", label: "Contact" },
-  { href: "/cart", label: "Cart" },
   { href: "/checkout", label: "Checkout" },
   { href: "/account", label: "Account" },
   { href: "/orders", label: "Orders" },

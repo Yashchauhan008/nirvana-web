@@ -1,5 +1,9 @@
 import { NirvanaHome } from "@/components/home/nirvana-home";
+import { listProducts } from "@/services/api/product.api";
 
-export default function HomePage() {
-  return <NirvanaHome />;
+export const dynamic = "force-dynamic";
+
+export default async function HomePage() {
+  const products = await listProducts();
+  return <NirvanaHome products={products} />;
 }

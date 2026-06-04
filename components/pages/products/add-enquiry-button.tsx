@@ -37,6 +37,11 @@ const guestEnquirySchema = z.object({
     .trim()
     .transform((s) => s.replace(/\D/g, ""))
     .pipe(z.string().regex(/^[0-9]{10}$/, "Phone number must be 10 digits")),
+  email: z
+    .string()
+    .trim()
+    .min(1, "Email is required")
+    .email("Enter a valid email address"),
   message: z
     .string()
     .trim()
@@ -69,6 +74,7 @@ export function AddEnquiryButton({
     defaultValues: {
       name: "",
       phone_number: "",
+      email: "",
       message: "",
       quantity: undefined,
     },
@@ -92,6 +98,7 @@ export function AddEnquiryButton({
         product_id: productId,
         name: values.name,
         phone_number: values.phone_number,
+        email: values.email.trim().toLowerCase(),
         message: values.message?.trim() ?? "",
         quantity,
       });
@@ -179,6 +186,23 @@ export function AddEnquiryButton({
               <FieldError
                 errors={errors.phone_number ? [errors.phone_number] : undefined}
               />
+            </FieldContent>
+          </Field>
+          <Field data-invalid={!!errors.email}>
+            <FieldLabel htmlFor="guest-enquiry-email">
+              <FieldTitle>
+                Email <span className="text-destructive">*</span>
+              </FieldTitle>
+            </FieldLabel>
+            <FieldContent>
+              <Input
+                id="guest-enquiry-email"
+                type="email"
+                placeholder="you@example.com"
+                aria-invalid={!!errors.email}
+                {...register("email")}
+              />
+              <FieldError errors={errors.email ? [errors.email] : undefined} />
             </FieldContent>
           </Field>
           <Field data-invalid={!!errors.message}>

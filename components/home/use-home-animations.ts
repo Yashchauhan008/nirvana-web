@@ -49,6 +49,7 @@ export function useHomeAnimations(
     connectLenisScrollTrigger(lenis);
     const detachLenisTicker = attachLenisToGsapTicker(lenis);
     if (lenisRef) lenisRef.current = lenis;
+    (window as any).lenis = lenis;
 
     gsap.ticker.lagSmoothing(500, 33);
 
@@ -337,17 +338,6 @@ export function useHomeAnimations(
         },
       });
 
-      gsap.to("[data-site-header]", {
-        backgroundColor: "rgba(248, 251, 249, 0.92)",
-        boxShadow: "0 4px 30px rgba(42, 69, 56, 0.08)",
-        ease: "none",
-        scrollTrigger: {
-          trigger: "[data-hero]",
-          start: "bottom top",
-          end: "bottom top",
-          toggleActions: "play none reverse none",
-        },
-      });
     }, root);
 
     root.classList.add("home-animated");
@@ -374,6 +364,7 @@ export function useHomeAnimations(
       detachLenisTicker();
       lenis.destroy();
       if (lenisRef) lenisRef.current = null;
+      (window as any).lenis = null;
       ScrollTrigger.scrollerProxy(document.documentElement, {});
       ScrollTrigger.clearScrollMemory();
       document.documentElement.classList.remove("lenis", "lenis-smooth");

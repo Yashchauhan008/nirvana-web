@@ -1,0 +1,30 @@
+.product-gallery {
+  --product-gallery-gold: var(--nirvana-gold, #c4a574);
+  --product-gallery-forest: var(--nirvana-forest, #2a4538);
+}
+
+.product-gallery__stage {
+  isolation: isolate;
+  background: #ffffff;
+}
+
+.product-gallery__image-wrap {
+  transform-origin: center center;
+  line-height: 0;
+}
+
+.product-gallery__image-wrap img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.product-gallery__thumbs {
+  flex-shrink: 0;
+}
+
+.product-gallery__thumb--active {
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--product-gallery-gold) 35%, transparent),
+    0 8px 20px -8px color-mix(in srgb, var(--product-gallery-forest) 18%, transparent);
+}

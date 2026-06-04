@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { TransitionLink } from "@/components/shared/transition-link";
 import { MoveRight, Sparkles, Droplet, Star } from "lucide-react";
 
 import { homeImages } from "@/config/home-images";
@@ -43,11 +44,17 @@ export function LuxuryHero() {
         aria-hidden
       />
 
-      <div data-hero-content className="relative z-10 mx-auto w-full max-w-7xl px-6 md:px-10">
+      <div
+        data-hero-content
+        className="relative z-10 mx-auto w-full max-w-7xl px-6 md:px-10"
+      >
         <div className="grid items-center gap-16 lg:grid-cols-[1.1fr_0.9fr]">
           <div className="relative">
             <div className="absolute -left-12 -top-12 hidden lg:block">
-              <Star className="h-12 w-12 text-[var(--nirvana-gold)]/40 animate-[spin_10s_linear_infinite]" strokeWidth={1} />
+              <Star
+                className="h-12 w-12 text-[var(--nirvana-gold)]/40 animate-[spin_10s_linear_infinite]"
+                strokeWidth={1}
+              />
             </div>
 
             <div
@@ -83,13 +90,13 @@ export function LuxuryHero() {
               data-hero-fade
               className="mt-12 flex flex-col sm:flex-row items-center gap-6"
             >
-              <Link
+              <TransitionLink
                 href="/products"
                 className="group relative flex h-14 items-center justify-center gap-3 overflow-hidden rounded-full bg-[var(--nirvana-forest)] px-10 font-body-strong text-sm uppercase tracking-[0.15em] text-[var(--nirvana-cream)] transition-all hover:scale-105 hover:bg-[var(--nirvana-deep)] hover:shadow-[0_20px_40px_rgba(42,69,56,0.3)]"
               >
                 <span>Explore Collection</span>
                 <MoveRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-              </Link>
+              </TransitionLink>
               <Link
                 href="/contact"
                 className="group flex h-14 items-center justify-center rounded-full border border-[var(--nirvana-sage)] bg-white/30 px-10 font-body-strong text-sm uppercase tracking-[0.18em] text-[var(--nirvana-forest)] backdrop-blur-sm transition-all hover:bg-white/60 hover:shadow-lg"
@@ -104,28 +111,42 @@ export function LuxuryHero() {
               className="mt-16 flex items-center gap-8 border-t border-[var(--nirvana-sage)]/30 pt-8"
             >
               <div className="flex flex-col gap-1">
-                <span className="font-display text-2xl text-[var(--nirvana-deep)]">4g</span>
-                <span className="font-body text-[10px] uppercase tracking-wider text-[var(--nirvana-forest)]/60">Titanium frame</span>
+                <span className="font-display text-2xl text-[var(--nirvana-deep)]">
+                  4g
+                </span>
+                <span className="font-body text-[10px] uppercase tracking-wider text-[var(--nirvana-forest)]/60">
+                  Titanium frame
+                </span>
               </div>
               <div className="h-8 w-px bg-[var(--nirvana-sage)]/50" />
               <div className="flex flex-col gap-1">
-                <span className="font-display text-2xl text-[var(--nirvana-deep)]">UV400</span>
-                <span className="font-body text-[10px] uppercase tracking-wider text-[var(--nirvana-forest)]/60">Max protection</span>
+                <span className="font-display text-2xl text-[var(--nirvana-deep)]">
+                  UV400
+                </span>
+                <span className="font-body text-[10px] uppercase tracking-wider text-[var(--nirvana-forest)]/60">
+                  Max protection
+                </span>
               </div>
               <div className="h-8 w-px bg-[var(--nirvana-sage)]/50" />
               <div className="flex flex-col gap-1">
-                <span className="font-display text-2xl text-[var(--nirvana-deep)]">100%</span>
-                <span className="font-body text-[10px] uppercase tracking-wider text-[var(--nirvana-forest)]/60">Bespoke fit</span>
+                <span className="font-display text-2xl text-[var(--nirvana-deep)]">
+                  100%
+                </span>
+                <span className="font-body text-[10px] uppercase tracking-wider text-[var(--nirvana-forest)]/60">
+                  Bespoke fit
+                </span>
               </div>
             </div>
           </div>
 
           {/* Right Visual Area */}
-          <div data-hero-visual className="relative flex items-center justify-center lg:justify-end w-full pt-10 lg:pt-0">
+          <div
+            data-hero-visual
+            className="relative flex items-center justify-center lg:justify-end w-full pt-10 lg:pt-0"
+          >
             <div className="absolute inset-0 bg-gradient-to-tr from-[var(--nirvana-sage)]/40 to-transparent blur-3xl rounded-full" />
-            
+
             <div className="relative w-full max-w-[550px] aspect-square lg:aspect-[4/5] mt-10 lg:mt-0">
-              
               <div
                 data-hero-visual-inner
                 data-hero-visual-media
@@ -198,7 +219,6 @@ export function LuxuryHero() {
                   </div>
                 </div>
               </div>
-
             </div>
           </div>
         </div>
@@ -216,14 +236,18 @@ export function LuxuryHero() {
           <div className="h-full w-full -translate-y-full bg-[var(--nirvana-forest)] animate-[scroll_2s_ease-in-out_infinite]" />
         </div>
       </a>
-      
-      <style dangerouslySetInnerHTML={{__html: `
+
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
         @keyframes scroll {
           0% { transform: translateY(-100%); }
           50% { transform: translateY(0); }
           100% { transform: translateY(100%); }
         }
-      `}} />
+      `,
+        }}
+      />
     </section>
   );
 }

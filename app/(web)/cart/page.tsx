@@ -1,5 +1,5 @@
-import { PlainPage } from "@/components/plain/plain-page";
+import { redirect } from "next/navigation";
 
 export default function CartPage() {
-  return <PlainPage title="Cart" />;
+  redirect("/products");
 }
